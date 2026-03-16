@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Global Freelancer Market Intelligence — Dashboard Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:         #f4f6f9;
+    --white:      #ffffff;
+    --navy:       #0e2a47;
+    --navy-mid:   #1a3a5c;
+    --bar-blue:   #2d5f8a;
+    --bar-mid:    #3a7ab5;
+    --accent:     #1e88c9;
+    --teal:       #00b4a0;
+    --red:        #c0392b;
+    --amber:      #e67e22;
+    --text-dark:  #1a2738;
+    --text-mid:   #3d5166;
+    --text-light: #6b8299;
+    --border:     #dce3eb;
+    --card-bg:    #ffffff;
+    --header-bg:  #0e2a47;
+    --tag-bg:     #e8f2f9;
+    --tag-color:  #1e6fa0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-dark);
+    font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--header-bg);
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    border-bottom: 3px solid var(--accent);
+  }
+  .header-logo {
+    background: var(--navy-mid);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .logo-bird {
+    width: 44px; height: 44px;
+    position: relative;
+  }
+  .logo-bird svg { width: 100%; height: 100%; }
+  .header-title {
+    padding: 22px 36px;
+    flex: 1;
+  }
+  .header-title h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+  }
+  .header-title p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 3px;
+    letter-spacing: 0.5px;
+  }
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 24px;
+  }
+  .nav-tab {
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .nav-tab:not(.active):hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+  }
+
+  /* ── KPI STRIP ── */
+  .kpi-strip {
+    background: var(--white);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .kpi-cell {
+    padding: 24px 32px;
+    border-right: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-cell:last-child { border-right: none; }
+  .kpi-cell::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .kpi-cell.k-neutral::before { background: var(--accent); }
+  .kpi-cell.k-warn::before    { background: var(--red); }
+  .kpi-cell.k-amber::before   { background: var(--amber); }
+  .kpi-cell.k-ok::before      { background: var(--teal); }
+
+  .kpi-value {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+  .kpi-value.warn    { color: var(--red); }
+  .kpi-value.ok      { color: var(--teal); }
+  .kpi-value.neutral { color: var(--navy); }
+  .kpi-value.amber   { color: var(--amber); }
+
+  .kpi-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-light);
+    margin-top: 5px;
+    font-weight: 600;
+  }
+  .kpi-badge {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge-red   { background: #fdecea; color: var(--red); }
+  .badge-amber { background: #fef3e2; color: var(--amber); }
+  .badge-teal  { background: #e0f5f2; color: var(--teal); }
+  .badge-blue  { background: var(--tag-bg); color: var(--tag-color); }
+
+  /* ── PAGE WRAPPER ── */
+  .page { padding: 32px 40px 60px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 40px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-bar {
+    width: 4px;
+    height: 22px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .section-num {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-light);
+  }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 0.2px;
+  }
+  .section-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 8px;
+  }
+
+  /* ── PROBLEM GRID ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .problem-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px 20px 22px 24px;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .problem-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--red);
+    border-radius: 6px 0 0 6px;
+  }
+  .problem-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .problem-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .problem-card p {
+    font-size: 12.5px;
+    color: var(--text-mid);
+    line-height: 1.55;
+  }
+
+  /* ── GOALS GRID ── */
+  .goals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .goal-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px 22px 22px 24px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    position: relative;
+  }
+  .goal-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--accent);
+    border-radius: 6px 0 0 6px;
+  }
+  .goal-num {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--bar-blue);
+    opacity: 0.18;
+    line-height: 1;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .goal-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 5px;
+  }
+  .goal-card p { font-size: 12.5px; color: var(--text-mid); line-height: 1.55; }
+
+  /* ── PAGE TAG ── */
+  .page-block { margin-bottom: 36px; }
+  .page-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--tag-bg);
+    color: var(--tag-color);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 3px;
+    margin-bottom: 14px;
+    border-left: 3px solid var(--accent);
+  }
+
+  /* ── VISUAL TABLE ── */
+  .visual-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    font-size: 13px;
+  }
+  .visual-table thead {
+    background: var(--navy);
+  }
+  .visual-table th {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.75);
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .visual-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text-mid);
+    line-height: 1.55;
+  }
+  .visual-table tr:last-child td { border-bottom: none; }
+  .visual-table tr:nth-child(even) td { background: #f9fbfd; }
+  .visual-table tr:hover td { background: #eef4fa; }
+  .visual-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--navy);
+  }
+  .visual-type {
+    font-size: 10.5px;
+    color: var(--accent);
+    margin-top: 3px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .insight-text strong { color: var(--navy); font-weight: 600; }
+
+  /* ── INSIGHT CARDS ── */
+  .insight-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .insight-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 20px 20px 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    position: relative;
+  }
+  .insight-card.ic-risk::before   { content:''; position:absolute; left:0;top:0;bottom:0;width:4px;background:var(--red);border-radius:6px 0 0 6px; }
+  .insight-card.ic-find::before   { content:''; position:absolute; left:0;top:0;bottom:0;width:4px;background:var(--accent);border-radius:6px 0 0 6px; }
+  .insight-card.ic-oppo::before   { content:''; position:absolute; left:0;top:0;bottom:0;width:4px;background:var(--teal);border-radius:6px 0 0 6px; }
+
+  .ic-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .ic-label.risk { background: #fdecea; color: var(--red); }
+  .ic-label.finding { background: var(--tag-bg); color: var(--tag-color); }
+  .ic-label.opportunity { background: #e0f5f2; color: #007a6a; }
+  .insight-card p { font-size: 12.5px; color: var(--text-mid); line-height: 1.6; }
+  .insight-card p strong { color: var(--navy); font-weight: 600; }
+
+  /* ── IMPACT GRID ── */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .impact-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .impact-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .impact-metric {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--bar-blue);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .impact-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .impact-card p { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    margin-top: 40px;
+  }
+  .cta-header {
+    background: var(--navy);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .cta-header .section-bar { background: var(--accent); height: 20px; }
+  .cta-header .section-num { color: rgba(255,255,255,0.5); }
+  .cta-header h2 { font-size: 16px; font-weight: 700; color: #fff; }
+  .cta-body {
+    padding: 32px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+  .cta-group h4 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+  .cta-list { list-style: none; }
+  .cta-list li {
+    font-size: 12.5px;
+    color: var(--text-mid);
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.55;
+  }
+  .cta-list li:last-child { border-bottom: none; }
+  .cta-arrow {
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 13px;
+  }
+  .cta-list li strong { color: var(--navy); font-weight: 600; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    border-top: 3px solid var(--accent);
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.5px;
+  }
+  footer span:first-child { color: rgba(255,255,255,0.65); }
+
+  @media (max-width: 900px) {
+    .page { padding: 20px; }
+    .kpi-strip { grid-template-columns: repeat(2,1fr); }
+    .problem-grid, .impact-grid { grid-template-columns: 1fr; }
+    .goals-grid, .insight-cards, .cta-body { grid-template-columns: 1fr; }
+    .header-nav { display: none; }
+  }
+
+  .center-image {
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+# <div class="header">
+
+  <div class="header-logo">
+    <!-- Bird/origami logo matching dashboard 
+    <svg class="logo-bird" viewBox="0 0 44 44" fill="none" img="freelancer-1.svg">
+      <polygon points="4,36 22,6 40,36" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <polygon points="4,36 22,14 22,36" fill="rgba(30,136,201,0.6)"/>
+      <polygon points="22,14 40,36 22,36" fill="rgba(30,136,201,0.3)"/>
+      <polygon points="4,36 14,22 22,14" fill="rgba(255,255,255,0.8)"/>
+      <polygon points="14,22 22,14 22,28" fill="rgba(255,255,255,0.4)"/>
+    </svg> 
+  -->
+  </div>
+  <div class="header-title">
+    <h1>Global Freelancer Market Intelligence Dashboard</h1>
+    <p>Intelligence Report · Power BI Dashboard Analysis · by Idowu Aluko</p>
+  </div>
+ 
+  <div class="header-nav">
+ <!--
+    <div class="nav-tab active">Dashboard</div>
+    <div class="nav-tab">GitHub Repo</div>
+    <div class="nav-tab">Decision Dashboard</div>
+    <div class="nav-tab">Insights</div>
+  -->
+  </div>
+</div>
+
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi-cell k-neutral">
+    <div class="kpi-badge badge-blue">ROBUST SAMPLE</div>
+    <div class="kpi-value neutral">1000</div>
+    <div class="kpi-label">Total Freelancers</div>
+  </div>
+  <div class="kpi-cell k-warn">
+    <div class="kpi-badge badge-red">CRITICAL</div>
+    <div class="kpi-value warn">2.26</div>
+    <div class="kpi-label">Avg. Client Rating</div>
+  </div>
+  <div class="kpi-cell k-amber">
+    <div class="kpi-badge badge-amber">BELOW TARGET</div>
+    <div class="kpi-value amber">65%</div>
+    <div class="kpi-label">Avg. Client Satisfaction</div>
+  </div>
+  <div class="kpi-cell k-amber">
+    <div class="kpi-badge badge-amber">COMPETITIVE</div>
+    <div class="kpi-value amber">$52.46</div>
+    <div class="kpi-label">Avg. Hourly Rate</div>
+  </div>
+</div>
+
+<!-- MAIN PAGE -->
+<div class="page">
+
+  <section>
+  <div class ="center-image">
+    <img src="images/pdashboard.gif" alt=""data-position="center center" width="1000" height="500"/>
+      <header class="major">
+					<h3>Global Freelancer Market Intelligence Dashboard</h3>
+          <ul class="actions">
+								<li><a href="https://github.com/al3x-id/global-freelancers-market-intelligence/tree/69bb3ad69554658961898878474960b34a9dda86/dashboard" class="button" target="_blank">Download in GitHub</a></li>
+							</ul>
+				</header>
+  </div>
+  </section>
+<!--
+<section>
+	<a href="https://1drv.ms/x/c/2e306439df9f6959/IQApXYFwEG3ARoHeExn-RPg4ATMqcobgi73KaLzkklfQrNo?e=cdTAhc" class="image">
+		<img src="images/Excel Dashboard.gif" alt=""data-position="center center" width="1000" height="500"/>
+	</a>
+		<div class="align-center">
+			<div class="content">
+				<header class="major">
+					<h3>Cross Border Payment Authorization Dashboard</h3>
+				</header>
+						<p>A dynamic Excel dashboard for monitoring and analyzing cross-border payment authorizations, providing real-time insights into transaction statuses and compliance metrics.</p>
+							<ul class="actions">
+								<li><a href="https://1drv.ms/x/c/2e306439df9f6959/IQApXYFwEG3ARoHeExn-RPg4ATMqcobgi73KaLzkklfQrNo?e=cdTAhc" class="button" target="_blank">View Excel Workbook</a></li>
+							</ul>
+			</div>
+		</div>
+	</section>
+  -->
+
+  <!-- SECTION 1: BUSINESS PROBLEMS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <div>
+        <div class="section-num">01 / Context</div>
+        <div class="section-title">Business Problems</div>
+      </div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <span class="problem-icon"></span>
+        <h3>Quality Crisis Across All Skills</h3>
+        <p>With an average client rating of just 2.26/5 and no skill category exceeding 2.6, the platform faces a systemic service delivery problem that threatens client retention and platform reputation.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon"></span>
+        <h3>Pricing Stagnation & Undervaluation</h3>
+        <p>Hourly rates are virtually flat across all skills ($50–$54), ignoring scarcity and demand signals. High-demand skills like Cybersecurity are priced identically to commoditised ones, leaving revenue on the table.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon"></span>
+        <h3>Unbalanced Geographic Distribution</h3>
+        <p>Freelancer supply is heavily concentrated in a handful of markets (South Korea, Canada), while large talent economies like Brazil and Japan remain vastly underrepresented — limiting diversity and scale.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon"></span>
+        <h3>Emerging Tech Skills Underperforming</h3>
+        <p>AI, Blockchain, and Mobile Apps — skills commanding global premium rates — consistently score the lowest on client satisfaction and value for money, indicating a serious expectation-delivery gap.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon"></span>
+        <h3>No Clear Performance Differentiation</h3>
+        <p>Without a clear signal distinguishing top from average freelancers, clients cannot make informed hiring decisions. The platform lacks a reliable meritocratic layer to surface quality talent.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon"></span>
+        <h3>Experience Does Not Guarantee Quality</h3>
+        <p>Senior and executive-level freelancers do not consistently outperform entry-level peers on client ratings, revealing that experience-based matching systems may be fundamentally flawed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: GOALS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <div>
+        <div class="section-num">02 / Purpose</div>
+        <div class="section-title">Goal of the Dashboard</div>
+      </div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="goals-grid">
+      <div class="goal-card">
+        <div class="goal-num">01</div>
+        <div>
+          <h3>Market Supply & Demand Visibility</h3>
+          <p>Give stakeholders a real-time view of how freelancer supply maps across skills and geographies, revealing concentration risks and untapped market opportunities.</p>
+        </div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">02</div>
+        <div>
+          <h3>Quality & Satisfaction Benchmarking</h3>
+          <p>Track client rating and satisfaction KPIs to identify which skills and experience tiers are meeting client expectations and which are consistently falling short.</p>
+        </div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">03</div>
+        <div>
+          <h3>Pricing Intelligence & Rate Optimisation</h3>
+          <p>Surface the relationship between hourly rates, satisfaction, and value scores to help freelancers price strategically and platforms design better compensation benchmarks.</p>
+        </div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">04</div>
+        <div>
+          <h3>Top Performer Identification & Profiling</h3>
+          <p>Identify the characteristics of the highest-value freelancers to create replicable success models — supporting talent development and client matching algorithms.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: KEY VISUALS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <div>
+        <div class="section-num">03 / Visual Analysis</div>
+        <div class="section-title">Key Visuals Explained</div>
+      </div>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="page-block">
+      <div class="page-tag">📊 Page 1 — Market Overview</div>
+       <section>
+          <div class ="center-image">
+            <img src="images/powerbidash.png" alt=""data-position="center center" width="1000" height="500"/>
+          </div>
+        </section>
+      <table class="visual-table">
+        <thead>
+          <tr>
+            <th style="width:200px">Visual</th>
+            <th>What It Shows</th>
+            <th>Why It Matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="visual-name">Freelancer Distribution by Skill</div>
+              <div class="visual-type">Bar Chart</div>
+            </td>
+            <td class="insight-text">Ranks all 10 skill categories by total headcount. <strong>DevOps (112)</strong> and <strong>UI/UX Design (109)</strong> lead supply; <strong>Cybersecurity (86)</strong> sits last.</td>
+            <td class="insight-text">Reveals competition density per skill. High supply = harder to stand out. Low supply with high demand (Cybersecurity) = easier market entry.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="visual-name">Average Hourly Rate by Skill</div>
+              <div class="visual-type">Column Chart</div>
+            </td>
+            <td class="insight-text">Compares the average rate freelancers charge across skills. All cluster tightly between <strong>$50 and $54</strong>, with no dramatic outlier.</td>
+            <td class="insight-text">Exposes a critical pricing inefficiency, scarcity and demand are not being reflected in rates. This depresses platform revenue potential.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="visual-name">Distribution by Country</div>
+              <div class="visual-type">Column Chart</div>
+            </td>
+            <td class="insight-text">Shows freelancer count per country across 20+ nations. <strong>South Korea (68)</strong> and <strong>Canada (65)</strong> lead; <strong>Brazil (31)</strong> is the lowest.</td>
+            <td class="insight-text">Identifies supply concentration risk and geographic expansion opportunities in underrepresented high-growth markets.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="visual-name">Hourly Rate vs Satisfaction Score</div>
+              <div class="visual-type">Scatter Plot</div>
+            </td>
+            <td class="insight-text">Plots each skill at the intersection of rate and client satisfaction. <strong>UI/UX and DevOps</strong> sit high-right. <strong>Cybersecurity and AI</strong> sit low-left. The upward trendline indicates a positive relationship between freelancer hourly rates and client satisfaction, suggesting higher-priced freelancers tend to deliver better client outcomes.</td>
+            <td class="insight-text">The most strategic visual, it defines which skills are worth investing in, which are overrated, and where the biggest client experience gaps exist.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="page-block">
+      <div class="page-tag">📊 Page 2 — Freelancer Performance</div>
+        <section>
+            <div class ="center-image">
+              <img src="images/powerbidash2.png" alt=""data-position="center center" width="1000" height="500"/>
+            </div>
+          </section>
+      <table class="visual-table">
+        <thead>
+          <tr>
+            <th style="width:200px">Visual</th>
+            <th>What It Shows</th>
+            <th>Why It Matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="visual-name">Average Rating by Skill</div>
+              <div class="visual-type">Bar Chart</div>
+            </td>
+            <td class="insight-text"><strong>DevOps (2.6)</strong> leads; <strong>Blockchain and Mobile Apps (2.1)</strong> trail. The entire range fits within a 0.5-point band, all skills are critically underperforming.</td>
+            <td class="insight-text">Identifies where quality intervention is most urgent, but also signals a platform-wide problem not isolated to specific skills.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="visual-name">Gender Distribution</div>
+              <div class="visual-type">Donut Chart</div>
+            </td>
+            <td class="insight-text"><strong>Female 51% (510)</strong> vs <strong>Male 49% (490)</strong> near-perfect parity in a traditionally male-dominated industry.</td>
+            <td class="insight-text">A strong inclusion signal. Next question: does this parity hold across high-earning skill categories and experience levels?</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="visual-name">Rating vs Years of Experience</div>
+              <div class="visual-type">Scatter Plot</div>
+            </td>
+            <td class="insight-text">Maps skills by experience and rating. <strong>DevOps</strong> earns higher ratings with more experience; <strong>Data Analysis and AI</strong> show low ratings regardless of tenure.</td>
+            <td class="insight-text">Challenges experience-based hiring assumptions. For many skills, more experience does not mean better client outcomes soft skills and communication likely matter more.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="page-block">
+      <div class="page-tag">📊 Page 3 — Decision Dashboard</div>
+        <section>
+            <div class ="center-image">
+              <img src="images/powerbidash3.png" alt=""data-position="center center" width="1000" height="500"/>
+            </div>
+          </section>
+      <table class="visual-table">
+        <thead>
+          <tr>
+            <th style="width:200px">Visual</th>
+            <th>What It Shows</th>
+            <th>Why It Matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="visual-name">Value for Money Ranking</div>
+              <div class="visual-type">Bar Chart</div>
+            </td>
+            <td class="insight-text"><strong>Graphic Design (2.3)</strong> tops the value chart; <strong>AI and Mobile Apps (2.0)</strong> are bottom-ranked. DevOps ranks 3rd despite dominating ratings.</td>
+            <td class="insight-text">Decouples quality from value, clients judge perceived worth relative to price. High-rated skills can still deliver poor value if priced incorrectly.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="visual-name">Top Freelancers Leaderboard</div>
+              <div class="visual-type">Data Table</div>
+            </td>
+            <td class="insight-text">Shows the top 12 freelancers by value score. All charge <strong>$20/hour</strong> (well below the $52.46 avg). Highest score: <strong>Tyler Cooper (9.35)</strong>, Entry-level UI/UX.</td>
+            <td class="insight-text">Proves the winning formula: lower price + high satisfaction + consistent delivery = best value score. Experience level is irrelevant to top-tier performance.</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="visual-name">Experience Level Segmentation</div>
+              <div class="visual-type">100% Stacked Bar Chart</div>
+            </td>
+            <td class="insight-text">Breaks down skill distribution across 4 experience tiers. <strong>Blockchain Development</strong> attracts a high mid-level share (18.25%); <strong>Machine Learning</strong> dominates at senior level (14.6%).</td>
+            <td class="insight-text">Reveals career migration patterns and where skills attract experienced professionals, enabling workforce planning and platform recruitment targeting.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 4: KEY INSIGHTS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <div>
+        <div class="section-num">04 / Findings</div>
+        <div class="section-title">Key Insights</div>
+      </div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="insight-cards">
+      <div class="insight-card ic-risk">
+        <div class="ic-label risk">⚠ Critical Risk</div>
+        <p><strong>Platform-wide quality failure:</strong> No skill category achieves even a 3/5 client rating. With a 2.26 average, the platform risks losing clients to competitors offering more reliable quality assurance.</p>
+      </div>
+      <div class="insight-card ic-oppo">
+        <div class="ic-label opportunity">Opportunity</div>
+        <p><strong>Cybersecurity is a blue ocean:</strong> Lowest supply (86 freelancers), global high-demand, yet priced identically to all other skills. Strategic recruitment and premium pricing here could significantly boost platform revenue.</p>
+      </div>
+      <div class="insight-card ic-find">
+        <div class="ic-label finding">Key Finding</div>
+        <p><strong>Low price wins, not high skill:</strong> Every single top-10 leaderboard freelancer charges <strong>$20/hour</strong> — 62% below the platform average. Value perception outweighs technical credentials in client decision-making.</p>
+      </div>
+      <div class="insight-card ic-risk">
+        <div class="ic-label risk">⚠ Critical Risk</div>
+        <p><strong>AI and ML are overpromising:</strong> Despite being prestige skills attracting senior talent, AI and Machine Learning consistently deliver the lowest client satisfaction and value scores — signalling a serious delivery gap.</p>
+      </div>
+      <div class="insight-card ic-find">
+        <div class="ic-label finding">Key Finding</div>
+        <p><strong>Gender parity is a competitive advantage:</strong> With a near-perfect 51/49 female-to-male split, this platform is more inclusive than the industry norm — a powerful differentiator for enterprise clients with DEI mandates.</p>
+      </div>
+      <div class="insight-card ic-oppo">
+        <div class="ic-label opportunity">Opportunity</div>
+        <p><strong>Geographic diversification is untapped:</strong> Brazil, Japan, Egypt, and Italy collectively have fewer freelancers than South Korea alone. Targeted expansion in these markets could double active supply without increasing competition in existing categories.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: BUSINESS IMPACT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-bar"></div>
+      <div>
+        <div class="section-num">05 / Outcomes</div>
+        <div class="section-title">Business Impact</div>
+      </div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <span class="impact-icon"></span>
+        <div class="impact-metric">35%</div>
+        <h3>Potential Satisfaction Lift</h3>
+        <p>Closing the gap from 65% to 90% client satisfaction through quality programmes could directly reduce churn and increase repeat hire rates.</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon"></span>
+        <div class="impact-metric">+$15–20</div>
+        <h3>Hourly Rate Uplift Possible</h3>
+        <p>Skills like Cybersecurity and DevOps could command $65–75/hour if marketed and matched based on verified value scores rather than flat-rate listings.</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon"></span>
+        <div class="impact-metric">2×</div>
+        <h3>Supply Expansion Potential</h3>
+        <p>Targeting underrepresented markets (Brazil, Japan, Southeast Asia) could double active freelancer supply within 12 months without oversaturating existing skill categories.</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon"></span>
+        <div class="impact-metric">9.35</div>
+        <h3>Replicable Top Performer Model</h3>
+        <p>The leaderboard proves a reproducible success formula — $20 rate + high satisfaction + consistency. Coaching mid-tier freelancers on this model could elevate the platform average significantly.</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon"></span>
+        <div class="impact-metric">51%</div>
+        <h3>Gender Parity — Enterprise Ready</h3>
+        <p>Near-equal gender balance positions the platform to win enterprise contracts from organisations with DEI hiring requirements — a $B+ market segment often underserved.</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon"></span>
+        <div class="impact-metric">86</div>
+        <h3>Cybersecurity Talent Gap</h3>
+        <p>The skill with lowest supply and globally highest demand has only 86 active freelancers. A targeted acquisition drive here creates a defensible niche with premium pricing power.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-header">
+      <div class="section-bar"></div>
+      <div class="section-num">06 / Strategic Recommendations</div>
+      <h2>Final Call to Action</h2>
+    </div>
+    <div class="cta-body">
+      <div class="cta-group">
+        <h4>For Platform Stakeholders</h4>
+        <ul class="cta-list">
+          <li><span class="cta-arrow">→</span><span><strong>Launch a quality improvement programme</strong> — introduce mandatory onboarding quality standards, client communication training, and delivery checklists across all skill categories to lift the 2.26 average above 3.5 within 2 quarters.</span></li>
+          <li><span class="cta-arrow">→</span><span><strong>Introduce value-score based matching</strong> — replace experience-tier matching with a composite value score (satisfaction + rate + delivery consistency) to connect clients with proven performers, not just experienced ones.</span></li>
+          <li><span class="cta-arrow">→</span><span><strong>Execute a Cybersecurity talent drive</strong> — recruit aggressively in this category, introduce premium pricing tiers ($70–85/hr), and market the scarcity signal to enterprise clients.</span></li>
+          <li><span class="cta-arrow">→</span><span><strong>Expand into underserved geographies</strong> — run targeted campaigns in Brazil, Japan, Egypt, and Southeast Asia to diversify supply, reduce concentration risk, and access untapped client pools.</span></li>
+          <li><span class="cta-arrow">→</span><span><strong>Leverage the gender parity story</strong> — actively market the 51% female freelancer stat to enterprise and government clients with DEI mandates as a platform differentiator.</span></li>
+        </ul>
+      </div>
+      <div class="cta-group">
+        <h4>For Freelancers on the Platform</h4>
+        <ul class="cta-list">
+          <li><span class="cta-arrow">→</span><span><strong>Price for value, not market average</strong> — top earners charge $20/hr and outperform $52/hr peers on value score. Lead with a clear value proposition, not a premium rate.</span></li>
+          <li><span class="cta-arrow">→</span><span><strong>Invest in client communication skills</strong> — data shows experience and technical skill alone do not drive high ratings. Responsiveness, clarity, and expectation-setting are the real differentiators.</span></li>
+          <li><span class="cta-arrow">→</span><span><strong>Cybersecurity specialists: reprice now</strong> — you are in the lowest-supply, highest-demand category but charging market average. A strategic rate increase paired with strong value delivery could 2× your earnings.</span></li>
+          <li><span class="cta-arrow">→</span><span><strong>AI and ML practitioners: close the satisfaction gap</strong> — your skill is prestigious but your satisfaction scores are the worst on the platform. Reframe deliverables, set clearer project scopes, and underpromise/overdeliver.</span></li>
+          <li><span class="cta-arrow">→</span><span><strong>Build a Value Score strategy</strong> — study the leaderboard's top performers. A high value score is the single strongest signal clients use to hire. Optimise for it deliberately.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>Global Freelancer Market Intelligence Dashboard · Power BI Analysis</span>
+  <span>Report generated · March 2026</span>
+</footer>
+
+</body>
+</html>
