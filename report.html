@@ -496,6 +496,38 @@
   .center-image {
   text-align: center;
 }
+  .row {
+  display: flex; /* Uses Flexbox for layout */
+  flex-wrap: wrap; /* Allows columns to wrap to the next line */
+  padding: 0 4px;
+}
+
+.column {
+  flex: 50%; /* Each column takes up half the width */
+  padding: 0 4px;
+}
+
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+  width: 100%; /* Ensures images scale within the column */
+}
+
+.collage-container {
+    display: flex; /* Enables Flexbox layout */
+    justify-content: space-around; /* Distributes space evenly around images */
+    flex-wrap: nowrap; /* Prevents images from wrapping to the next line */
+    padding: 10px; /* Add some padding around the container */
+}
+
+.collage-container img {
+    width: 33%; /* Makes each image take up roughly one-third of the container width */
+    height: auto; /* Maintains the image's aspect ratio */
+    margin: 0 5px; /* Adds a small margin between images */
+    vertical-align: middle; /* Aligns images vertically */
+    /* Add other styling as needed, e.g., border, box-shadow, etc. */
+}
+
 </style>
 </head>
 <body>
@@ -554,7 +586,7 @@
   </div>
 </div>
 
-<!-- MAIN PAGE -->
+<!-- MAIN PAGE
 <div class="page">
 
   <section>
@@ -568,7 +600,7 @@
 				</header>
   </div>
   </section>
-<!--
+
 <section>
 	<a href="https://1drv.ms/x/c/2e306439df9f6959/IQApXYFwEG3ARoHeExn-RPg4ATMqcobgi73KaLzkklfQrNo?e=cdTAhc" class="image">
 		<img src="images/Excel Dashboard.gif" alt=""data-position="center center" width="1000" height="500"/>
@@ -586,6 +618,19 @@
 		</div>
 	</section>
   -->
+<div class="collage-container">
+        <img src="images/Dashboard 1.png" alt="Description of Image 1">
+        <img src="images/Dashboard 2.png" alt="Description of Image 2">
+        <img src="images/Dashboard 3.png" alt="Description of Image 3">
+    </div>
+  <div class="center-image">
+  <header class="major">
+					<h3>Global Freelancer Market Intelligence Dashboard</h3>
+          <ul class="actions">
+								<li><a href="https://github.com/al3x-id/global-freelancers-market-intelligence/tree/69bb3ad69554658961898878474960b34a9dda86/dashboard" class="button" target="_blank">Download in GitHub</a></li>
+							</ul>
+  </header>
+  </div>
 
   <!-- SECTION 1: BUSINESS PROBLEMS -->
   <div class="section">
