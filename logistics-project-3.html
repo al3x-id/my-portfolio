@@ -44,7 +44,7 @@
 
     /* SECTIONS */
     section{padding:5rem 4rem}
-    .section-inner{max-width:960px;margin:0 auto}
+    .section-inner{max-width:960px;padding:0;margin:0 auto}
     .section-tag{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:0.8rem}
     h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;color:#fff;margin-bottom:1.2rem;line-height:1.2}
     h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;margin-bottom:0.5rem}
@@ -61,13 +61,13 @@
     .screen-dots span:nth-child(2){background:#f59e0b}
     .screen-dots span:nth-child(3){background:#22c55e}
     .screen-filename{font-size:0.75rem;color:var(--muted);font-weight:500;margin-left:0.4rem}
-    .screen-body{padding-top:2.4rem}
+    .screen-body{padding-top:2.4rem; overflow-x: auto;-webkit-overflow-scrolling: touch;}
     .screenshot-wrap img{width:100%;height:auto;display:block;border-radius:0;}
     .screenshot-wrap.img-only{border-radius: 14px;overflow:hidden;}
     .screenshot-wrap img:hover{transform: scale(1.01);transition: transform 0.3s ease;}
 
     /* EXCEL MOCK STYLES */
-    .xl-mock{background:#fff;font-family:'DM Sans',sans-serif;font-size:0.75rem;overflow-x:auto}
+    .xl-mock{background:#fff;font-family:'DM Sans',sans-serif;font-size:0.75rem;overflow-x:auto;-webkit-overflow-scrolling: touch;}
     .xl-toolbar{background:#f3f4f6;border-bottom:1px solid #d1d5db;padding:0.4rem 0.8rem;display:flex;gap:1rem;align-items:center}
     .xl-toolbar span{font-size:0.7rem;color:#6b7280;font-weight:500}
     .xl-tab-row{background:#e5e7eb;display:flex;gap:0;border-top:1px solid #d1d5db}
@@ -86,7 +86,7 @@
     .xl-formula{color:#1d4ed8;font-style:italic}
 
     /* PIVOT MOCK */
-    .pivot-mock{background:#fff;padding:1rem;overflow-x:auto}
+    .pivot-mock{background:#fff;padding:1rem;overflow-x:auto; -webkit-overflow-scrolling: touch;}
     .pivot-title{font-size:0.72rem;font-weight:700;color:#1e3a5f;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:2px solid #f97316}
     .pivot-table{border-collapse:collapse;font-size:0.72rem;min-width:400px}
     .pivot-table th{background:#1e3a5f;color:#fff;padding:0.4rem 0.8rem;border:1px solid rgba(255,255,255,0.2);text-align:center;font-weight:600}
@@ -123,7 +123,7 @@
     .y-labels{position:absolute;left:-42px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:space-between;font-size:0.6rem;color:#9ca3af;text-align:right;width:38px}
 
     /* DASHBOARD MOCK */
-    .dash-mock{background:#0f1c35;padding:1.4rem;font-family:'DM Sans',sans-serif}
+    .dash-mock{background:#0f1c35;padding:1.4rem;font-family:'DM Sans',sans-serif;min-width: none;border-radius:14px;overflow-x:auto}
     .dash-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
     .dash-title-txt{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff}
     .dash-icons{display:flex;gap:0.5rem}
@@ -169,9 +169,8 @@
     .step::before{content:'';position:absolute;left:27px;top:56px;bottom:0;width:2px;background:var(--border)}
     .step:last-child::before{display:none}
     .step-num{width:56px;height:56px;border-radius:50%;background:var(--card);border:1px solid rgba(249,115,22,0.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--accent);flex-shrink:0;position:relative;z-index:1}
-    .step-body h3{margin-top:0.8rem}
-    .step-body p{margin-bottom:0.6rem}
-    .code-block{background:#0d1526;border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:1rem 1.2rem;margin:0.8rem 0;font-family:'Courier New',monospace;font-size:0.82rem;color:#7dd3fc;white-space:pre;overflow-x:auto}
+    .step-body{ min-width:0;overflow: hidden}
+    .code-block{background:#0d1526;border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:1rem 1.2rem;margin:0.8rem 0;font-family:'Courier New',monospace;font-size:0.82rem;color:#7dd3fc;white-space:pre;max-width:100%;box-sizing: border-box;overflow-x:auto; -webkit-overflow-scrolling: touch;}
 
     /* FINDINGS */
     .findings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:2.5rem 0}
