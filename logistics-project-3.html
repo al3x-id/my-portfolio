@@ -233,6 +233,42 @@
       .dash-body{grid-template-columns:1fr}
       .dash-kpi-row{grid-template-columns:repeat(3,1fr)}
       footer{flex-direction:column;padding:2rem 1.5rem}
+      /* Hide the table entirely on mobile */
+.impact-section table,
+.impact-section thead,
+.impact-section tbody,
+.impact-section th,
+.impact-section td,
+.impact-section tr {
+  display: block;
+  width: 100%;
+}
+
+.impact-section thead {
+  display: none; /* hide the header row */
+}
+
+.impact-section tr {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  white-space: normal;
+}
+
+.impact-section td {
+  padding: 0.4rem 0;
+  border: none;
+  font-size: 0.85rem;
+  white-space: normal;
+}
+
+/* Add labels back since the header is hidden */
+.impact-section td:nth-child(1)::before { content: "FINDING"; display:block; font-size:0.65rem; color:var(--accent); font-weight:700; letter-spacing:0.08em; margin-bottom:0.2rem; }
+.impact-section td:nth-child(2)::before { content: "CURRENT STATE"; display:block; font-size:0.65rem; color:var(--accent); font-weight:700; letter-spacing:0.08em; margin-top:0.6rem; margin-bottom:0.2rem; }
+.impact-section td:nth-child(3)::before { content: "RECOMMENDED ACTION"; display:block; font-size:0.65rem; color:var(--accent); font-weight:700; letter-spacing:0.08em; margin-top:0.6rem; margin-bottom:0.2rem; }
+.impact-section td:nth-child(4)::before { content: "BUSINESS OUTCOME"; display:block; font-size:0.65rem; color:var(--accent); font-weight:700; letter-spacing:0.08em; margin-top:0.6rem; margin-bottom:0.2rem; }
     }
   </style>
 </head>
