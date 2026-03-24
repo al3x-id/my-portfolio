@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logistics Performance Analysis — Idowu Aluko</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --navy:#0a0f1e;--navy2:#111827;--navy3:#1a2540;
+      --accent:#f97316;--accent2:#fb923c;--blue:#3b82f6;
+      --green:#22c55e;--red:#ef4444;--text:#e2e8f0;
+      --muted:#94a3b8;--card:#141d30;--border:rgba(255,255,255,0.07);
+      --xl-green:#16a34a;--xl-header:#1e3a5f;--xl-row:#f0f4f8;--xl-alt:#e8f0fe;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--navy);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(10,15,30,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#fff;text-decoration:none}
+    .nav-logo span{color:var(--accent)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;font-weight:500;transition:color 0.2s}
+    .nav-links a:hover{color:#fff}
+    .nav-cta{background:var(--accent);color:#fff;border:none;padding:0.55rem 1.4rem;border-radius:6px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;text-decoration:none;transition:background 0.2s}
+    .nav-cta:hover{background:var(--accent2)}
+
+    /* HERO */
+    .hero{min-height:100vh;display:flex;align-items:center;padding:8rem 4rem 4rem;position:relative;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(59,130,246,0.08) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 20% 80%,rgba(249,115,22,0.06) 0%,transparent 60%)}
+    .hero-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%)}
+    .hero-content{position:relative;z-index:1;max-width:780px}
+    .hero-tag{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:var(--accent);padding:0.4rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:1.5rem}
+    .hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);display:block}
+    h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:800;line-height:1.1;color:#fff;margin-bottom:1.5rem}
+    h1 em{font-style:normal;color:var(--accent)}
+    .hero-desc{font-size:1.1rem;color:var(--muted);max-width:580px;margin-bottom:2.5rem;font-weight:300}
+    .hero-meta{display:flex;gap:2rem;flex-wrap:wrap}
+    .meta-item{display:flex;flex-direction:column;gap:0.2rem}
+    .meta-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:600}
+    .meta-value{font-size:0.95rem;color:var(--text);font-weight:500}
+
+    /* SECTIONS */
+    section{padding:5rem 4rem}
+    .section-inner{max-width:960px;margin:0 auto}
+    .section-tag{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:0.8rem}
+    h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;color:#fff;margin-bottom:1.2rem;line-height:1.2}
+    h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;margin-bottom:0.5rem}
+    p{color:var(--muted);margin-bottom:1.2rem;font-weight:300}
+    p strong{color:var(--text);font-weight:500}
+    .divider{border:none;border-top:1px solid var(--border);margin:0}
+
+    /* SCREENSHOT MOCK */
+    .screenshot-wrap{margin:1rem 0;border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 24px 64px rgba(0,0,0,0.5);position:relative}
+   /*.screenshot-wrap .screen-label{position:absolute;top:0;left:0;right:0;background:transparent;backdrop-filter:blur(8px);padding:0.55rem 1rem;display:flex;align-items:center;gap:0.6rem;z-index:2;border-bottom:1px solid var(--border)} */
+    .screen-dots{display:flex;gap:5px}
+    .screen-dots span{width:10px;height:10px;border-radius:50%;display:block}
+    .screen-dots span:nth-child(1){background:#ef4444}
+    .screen-dots span:nth-child(2){background:#f59e0b}
+    .screen-dots span:nth-child(3){background:#22c55e}
+    .screen-filename{font-size:0.75rem;color:var(--muted);font-weight:500;margin-left:0.4rem}
+    .screen-body{padding-top:2.4rem}
+    .screenshot-wrap img{width:100%;height:auto;display:block;border-radius:0;}
+    .screenshot-wrap.img-only{border-radius: 14px;overflow:hidden;}
+    .screenshot-wrap img:hover{transform: scale(1.01);transition: transform 0.3s ease;}
+
+    /* EXCEL MOCK STYLES */
+    .xl-mock{background:#fff;font-family:'DM Sans',sans-serif;font-size:0.75rem;overflow-x:auto}
+    .xl-toolbar{background:#f3f4f6;border-bottom:1px solid #d1d5db;padding:0.4rem 0.8rem;display:flex;gap:1rem;align-items:center}
+    .xl-toolbar span{font-size:0.7rem;color:#6b7280;font-weight:500}
+    .xl-tab-row{background:#e5e7eb;display:flex;gap:0;border-top:1px solid #d1d5db}
+    .xl-tab{padding:0.3rem 1rem;font-size:0.7rem;color:#6b7280;cursor:default;border-right:1px solid #d1d5db}
+    .xl-tab.active{background:#fff;color:#1f3a5f;font-weight:700;border-top:2px solid #f97316}
+    .xl-sheet{overflow-x:auto}
+    .xl-table{border-collapse:collapse;width:100%;min-width:600px}
+    .xl-table th{background:var(--xl-header);color:#fff;padding:0.45rem 0.7rem;text-align:left;font-weight:600;font-size:0.72rem;white-space:nowrap;border:1px solid rgba(255,255,255,0.15)}
+    .xl-table td{padding:0.35rem 0.7rem;border:1px solid #e2e8f0;white-space:nowrap;font-size:0.72rem;color:#374151}
+    .xl-table tr:nth-child(even) td{background:#f8fafc}
+    .xl-table tr:hover td{background:#eff6ff}
+    .xl-badge{display:inline-block;padding:0.15rem 0.5rem;border-radius:4px;font-size:0.65rem;font-weight:700}
+    .xl-on-time{background:#dcfce7;color:#16a34a}
+    .xl-late{background:#fee2e2;color:#dc2626}
+    .xl-early{background:#dbeafe;color:#2563eb}
+    .xl-formula{color:#1d4ed8;font-style:italic}
+
+    /* PIVOT MOCK */
+    .pivot-mock{background:#fff;padding:1rem;overflow-x:auto}
+    .pivot-title{font-size:0.72rem;font-weight:700;color:#1e3a5f;margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:2px solid #f97316}
+    .pivot-table{border-collapse:collapse;font-size:0.72rem;min-width:400px}
+    .pivot-table th{background:#1e3a5f;color:#fff;padding:0.4rem 0.8rem;border:1px solid rgba(255,255,255,0.2);text-align:center;font-weight:600}
+    .pivot-table th.row-header{background:#2d4a6f;text-align:left}
+    .pivot-table td{padding:0.35rem 0.8rem;border:1px solid #e2e8f0;text-align:right;color:#374151}
+    .pivot-table td.row-label{text-align:left;font-weight:600;color:#1e3a5f;background:#f0f4f8}
+    .pivot-table tr:hover td{background:#eff6ff}
+    .pivot-table .total-row td{background:#1e3a5f;color:#fff;font-weight:700}
+    .pivot-table .total-row td.row-label{background:#1e3a5f;color:#fff}
+
+    /* CHART MOCK */
+    .chart-mock{background:#fff;padding:1.2rem;border-top:1px solid #e2e8f0}
+    .chart-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+    .chart-title-txt{font-size:0.78rem;font-weight:700;color:#1e3a5f}
+    .chart-legend{display:flex;gap:1rem}
+    .legend-item{display:flex;align-items:center;gap:0.3rem;font-size:0.65rem;color:#6b7280}
+    .legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+    .bar-chart-area{display:flex;flex-direction:column;gap:0.5rem}
+    .chart-bar-row{display:flex;align-items:center;gap:0.8rem}
+    .chart-bar-label{font-size:0.68rem;color:#6b7280;width:60px;text-align:right;flex-shrink:0}
+    .chart-bar-group{display:flex;flex-direction:column;gap:3px;flex:1}
+    .chart-bar{height:14px;border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:0.6rem;color:#fff;font-weight:600;min-width:20px}
+    .chart-bar-val{font-size:0.65rem;color:#6b7280;width:30px;flex-shrink:0}
+
+    /* COMBO CHART MOCK */
+    .combo-chart{background:#fff;padding:1.2rem;border-top:1px solid #e2e8f0}
+    .combo-area{position:relative;height:180px;margin-top:1rem;border-left:2px solid #e2e8f0;border-bottom:2px solid #e2e8f0}
+    .combo-bars{display:flex;align-items:flex-end;height:100%;gap:2px;padding:0 4px}
+    .c-bar{flex:1;background:linear-gradient(to top,#1e3a5f,#3b82f6);border-radius:2px 2px 0 0;position:relative;transition:opacity 0.2s}
+    .c-bar:hover{opacity:0.8}
+    .combo-line{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
+    .month-labels{display:flex;gap:2px;padding:0.3rem 4px 0;font-size:0.58rem;color:#9ca3af;text-align:center}
+    .month-labels span{flex:1}
+    .y-labels{position:absolute;left:-42px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:space-between;font-size:0.6rem;color:#9ca3af;text-align:right;width:38px}
+
+    /* DASHBOARD MOCK */
+    .dash-mock{background:#0f1c35;padding:1.4rem;font-family:'DM Sans',sans-serif}
+    .dash-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+    .dash-title-txt{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff}
+    .dash-icons{display:flex;gap:0.5rem}
+    .dash-icon{width:24px;height:24px;border-radius:4px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:#fff}
+    .dash-kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0.6rem;margin-bottom:1rem}
+    .d-kpi{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.8rem;text-align:center}
+    .d-kpi-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:#fff}
+    .d-kpi-val.dg{color:#22c55e}.d-kpi-val.dr{color:#ef4444}
+    .d-kpi-label{font-size:0.58rem;color:#94a3b8;margin-top:0.2rem}
+    .d-kpi-ring{display:flex;align-items:center;justify-content:center;gap:0.3rem}
+    .d-ring{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:#fff}
+    .dash-body{display:grid;grid-template-columns:180px 1fr 1fr;gap:0.8rem}
+    .d-slicers{display:flex;flex-direction:column;gap:0.6rem}
+    .d-slicer-group{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:0.6rem}
+    .d-slicer-title{font-size:0.6rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem}
+    .d-slicer-btn{background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.3);color:#fdba74;border-radius:4px;padding:0.2rem 0.5rem;font-size:0.62rem;font-weight:600;margin:2px;display:inline-block;cursor:default}
+    .d-chart-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem}
+    .d-chart-label{font-size:0.65rem;font-weight:600;color:#e2e8f0;margin-bottom:0.6rem}
+    .d-bar-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem}
+    .d-bar-lbl{font-size:0.58rem;color:#94a3b8;width:46px;text-align:right;flex-shrink:0}
+    .d-bar-track{flex:1;height:7px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+    .d-bar-fill{height:100%;border-radius:3px}
+    .d-bar-num{font-size:0.58rem;color:#94a3b8;width:28px;text-align:right;flex-shrink:0}
+    .d-donut-row{display:flex;justify-content:space-around;align-items:center;padding-top:0.4rem}
+    .d-donut{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#fff;position:relative}
+    .d-donut-label{font-size:0.58rem;color:#94a3b8;text-align:center;margin-top:0.3rem}
+    .insights-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.8rem;margin-top:0.8rem;grid-column:2/-1}
+    .insights-title{font-size:0.65rem;font-weight:700;color:#f97316;margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.08em}
+    .insights-text{font-size:0.62rem;color:#94a3b8;line-height:1.6}
+
+    /* STATS GRID */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:2.5rem 0}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:border-color 0.2s,transform 0.2s}
+    .stat-card:hover{border-color:rgba(249,115,22,0.3);transform:translateY(-2px)}
+    .stat-number{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;line-height:1}
+    .stat-number span{color:var(--accent)}
+    .stat-desc{font-size:0.82rem;color:var(--muted);margin-top:0.4rem}
+
+    /* PROCESS STEPS */
+    .steps{display:flex;flex-direction:column;gap:0;margin:2.5rem 0}
+    .step{display:grid;grid-template-columns:56px 1fr;gap:1.5rem;align-items:start;position:relative;padding-bottom:2.5rem}
+    .step:last-child{padding-bottom:0}
+    .step::before{content:'';position:absolute;left:27px;top:56px;bottom:0;width:2px;background:var(--border)}
+    .step:last-child::before{display:none}
+    .step-num{width:56px;height:56px;border-radius:50%;background:var(--card);border:1px solid rgba(249,115,22,0.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--accent);flex-shrink:0;position:relative;z-index:1}
+    .step-body h3{margin-top:0.8rem}
+    .step-body p{margin-bottom:0.6rem}
+    .code-block{background:#0d1526;border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:1rem 1.2rem;margin:0.8rem 0;font-family:'Courier New',monospace;font-size:0.82rem;color:#7dd3fc;white-space:pre;overflow-x:auto}
+
+    /* FINDINGS */
+    .findings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:2.5rem 0}
+    .finding-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.8rem;transition:border-color 0.25s,transform 0.25s;position:relative;overflow:hidden}
+    .finding-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+    .finding-card.red::before{background:var(--red)}
+    .finding-card.orange::before{background:var(--accent)}
+    .finding-card.blue::before{background:var(--blue)}
+    .finding-card.green::before{background:var(--green)}
+    .finding-card:hover{transform:translateY(-3px)}
+    .finding-card.red:hover{border-color:rgba(239,68,68,0.3)}
+    .finding-card.orange:hover{border-color:rgba(249,115,22,0.3)}
+    .finding-card.blue:hover{border-color:rgba(59,130,246,0.3)}
+    .finding-card.green:hover{border-color:rgba(34,197,94,0.3)}
+    .finding-icon{font-size:1.8rem;margin-bottom:0.8rem}
+    .finding-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:#fff;margin-bottom:0.4rem}
+    .finding-card p{font-size:0.88rem;margin-bottom:0}
+    .finding-stat{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin:0.4rem 0}
+    .finding-stat.red{color:var(--red)}.finding-stat.orange{color:var(--accent)}
+    .finding-stat.blue{color:var(--blue)}.finding-stat.green{color:var(--green)}
+
+    /* IMPACT TABLE */
+    .impact-section{background:var(--navy2)}
+    table{width:100%;border-collapse:collapse;margin:2rem 0}
+    thead tr{border-bottom:1px solid rgba(249,115,22,0.3)}
+    th{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);padding:0.8rem 1rem;text-align:left}
+    td{padding:1rem 1rem;font-size:0.88rem;color:var(--muted);border-bottom:1px solid var(--border);font-weight:300;vertical-align:top}
+    td:first-child{color:var(--text);font-weight:500}
+    tr:hover td{background:rgba(255,255,255,0.02)}
+    .badge{display:inline-block;padding:0.25rem 0.7rem;border-radius:100px;font-size:0.75rem;font-weight:600}
+    .badge-red{background:rgba(239,68,68,0.15);color:#fca5a5}
+    .badge-green{background:rgba(34,197,94,0.15);color:#86efac}
+    .badge-orange{background:rgba(249,115,22,0.15);color:#fdba74}
+
+    .tools-row{display:flex;flex-wrap:wrap;gap:0.8rem;margin:1.5rem 0}
+    .tool-pill{background:var(--card);border:1px solid var(--border);color:var(--text);padding:0.5rem 1.1rem;border-radius:100px;font-size:0.85rem;font-weight:500}
+    .callout{background:var(--card);border:1px solid rgba(249,115,22,0.2);border-radius:14px;padding:2rem;margin-top:2rem}
+    .callout p{font-size:1.05rem;color:var(--text);font-weight:400;margin-bottom:0}
+    .callout strong{color:var(--accent)}
+
+    /* CAPTION */
+    .img-caption{font-size:0.75rem;color:var(--muted);text-align:center;padding:0.6rem 1rem;background:rgba(255,255,255,0.03);border-top:1px solid var(--border);font-style:italic}
+
+    /* FOOTER */
+    footer{background:var(--navy2);border-top:1px solid var(--border);padding:3rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+    .footer-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#fff}
+    .footer-name span{color:var(--accent)}
+    .footer-copy{font-size:0.78rem;color:var(--muted);margin-top:0.3rem;font-weight:300}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.2s}
+    .footer-links a:hover{color:var(--accent)}
+
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.6s ease,transform 0.6s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    @media(max-width:768px){
+      nav{padding:1rem 1.5rem}.nav-links{display:none}
+      section,.hero{padding:4rem 1.5rem}
+      .findings-grid{grid-template-columns:1fr}
+      .dash-body{grid-template-columns:1fr}
+      .dash-kpi-row{grid-template-columns:repeat(3,1fr)}
+      footer{flex-direction:column;padding:2rem 1.5rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Idowu <span>Aluko</span></a>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#findings">Findings</a></li>
+    <li><a href="#impact">Business Impact</a></li>
+  </ul>
+  <a href="https://1drv.ms/x/c/2e306439df9f6959/IQDbyRd_NaTNSr4EZo9mQALiAQJuwpLIft3UUcYRTOu0J2k?e=4L3gsI" target="_blank" class="nav-cta">View Excel Workbook →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Excel · Data Analytics · Logistics</div>
+    <h1>Logistics Performance <em>Analysis</em> Dashboard</h1>
+    <p class="hero-desc">A deep-dive analysis of 3,000 delivery records across South Africa's major cities — uncovering route inefficiencies, vehicle cost gaps, and the operational patterns driving a 31% late delivery rate.</p>
+    <div class="hero-meta">
+      <div class="meta-item"><span class="meta-label">Tool</span><span class="meta-value">Microsoft Excel</span></div>
+      <div class="meta-item"><span class="meta-label">Records</span><span class="meta-value">3,000 Deliveries</span></div>
+      <div class="meta-item"><span class="meta-label">Coverage</span><span class="meta-value">6 Cities · 5 Routes · 3 Vehicles</span></div>
+      <div class="meta-item"><span class="meta-label">Period</span><span class="meta-value">Jan – Dec 2024</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider"/>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">01 — Project Overview</div>
+      <h2>What This Project Is About</h2>
+      <p>This project was built as a <strong>portfolio case study</strong> targeting logistics and transport companies across Nigeria and Africa. Using a structured operational dataset, the goal was to go beyond surface-level reporting — identifying <strong>specific, actionable problems</strong> a logistics company could solve with better data practices.</p>
+      <p>The entire analysis was conducted in <strong>Microsoft Excel</strong> using PivotTables, PivotCharts, structured formulas, and an interactive slicer-driven dashboard — demonstrating what a skilled data analyst can extract from operational data without writing a single line of code.</p>
+    </div>
+
+    <div class="stats-grid reveal">
+      <div class="stat-card"><div class="stat-number">3000</div><div class="stat-desc">Delivery records analysed</div></div>
+      <div class="stat-card"><div class="stat-number">6</div><div class="stat-desc">Major South African cities</div></div>
+      <div class="stat-card"><div class="stat-number">5</div><div class="stat-desc">Distinct delivery routes</div></div>
+      <div class="stat-card"><div class="stat-number">3</div><div class="stat-desc">Vehicle types tracked</div></div>
+      <div class="stat-card"><div class="stat-number">12</div><div class="stat-desc">Months of operations data</div></div>
+      <div class="stat-card"><div class="stat-number">R12.9M</div><div class="stat-desc">Total revenue in dataset</div></div>
+    </div>
+
+    
+
+<hr class="divider"/>
+<div class="screenshot-wrap">
+  <div class ="screen-label">
+    <div class="screen-dots"><span></span><span></span><span></span>
+    </div>
+    <span class = "screen-filename"> Raw Dataset </span>
+  </div>
+  <img src="images/Raw.png">
+  <div class="img-caption">Raw Dataset sheet</div>
+    </div>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">02 — Analytical Process</div>
+      <h2>How the Analysis Was Built</h2>
+      <p>The project followed a structured, reproducible six-step workflow — from raw data preparation through to an interactive dashboard designed for non-technical stakeholders.</p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Data Preparation & Table Structuring</h3>
+          <p>The Transformed dataset was converted into a named Excel Table (<strong>LogisticsData</strong>) enabling structured column references. Three helper columns were added:</p>
+          <div class="code-block">Month       =TEXT(PlannedDispatchDate, "MMMM")
+Delay Days  =ActualDeliveryDate - PlannedDeliveryDate
+CostPerKM   =DeliveryCost / DistanceKM</div>
+          <p>This transformed raw dates into measurable dimensions — enabling monthly trend and delay severity analysis across all 3,000 records.</p>
+        </div>
+      </div>
+
+       <div class="screenshot-wrap">
+  <div class ="screen-label">
+    <div class="screen-dots"><span></span><span></span><span></span>
+    </div>
+    <span class = "screen-filename"> Transformed Dataset </span>
+  </div>
+  <img src="images/Dataset.png">
+  <div class="img-caption">Transformed Dataset sheet — the original raw data was converted into a named Excel Table, enabling structured references and dynamic analysis. Three new columns (Month, Delay Days and CostPerKM) were added to create key analytical dimensions for the dashboard.</div>
+    </div>
+  
+
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>KPI Summary</h3>
+          <p>A dedicated KPI sheet computed top-line business metrics dynamically using Pivot Tables</p>
+          <p>These cells feed the dashboard KPI cards live — updating automatically when source data changes.</p>
+        </div>
+      </div>
+
+  <div class="screenshot-wrap">
+  <div class ="screen-label">
+    <div class="screen-dots"><span></span><span></span><span></span>
+    </div>
+    <span class = "screen-filename"> KPI SUMMARY </span>
+  </div>
+  <img src="images/KPI.png">
+  <div class="img-caption">KPI Summary sheet — dynamically computed business metrics fed into the interactive dashboard.</div>
+    </div>
+
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Route Performance Analysis</h3>
+          <p>A PivotTable was built with <strong>Route</strong> as rows and <strong>Delivery Status</strong> as columns, counting each delivery outcome per route. A Clustered Bar Chart visualised the late vs. on-time split clearly.</p>
+        </div>
+      </div>
+
+<div class="screenshot-wrap">
+  <div class ="screen-label">
+    <div class="screen-dots"><span></span><span></span><span></span>
+    </div>
+    <span class = "screen-filename"> Route Analysis </span>
+  </div>
+  <img src="images/Route Analysis.png">
+  <div class="img-caption">Route Analysis sheet — a PivotTable and Clustered Bar Chart visualising delivery performance across different routes.</div>
+    </div>
+
+ 
+      <div class="step reveal">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Vehicle Efficiency Analysis</h3>
+          <p>The same PivotTable structure was applied at the vehicle level. Also, <strong>AverageCost Per KM</strong> metric was calculated to surface true efficiency — revealing Bikes as the most expensive vehicle despite lowest usage.</p>
+        </div>
+      </div>
+
+<div class="screenshot-wrap">
+  <div class ="screen-label">
+    <div class="screen-dots"><span></span><span></span><span></span>
+    </div>
+    <span class = "screen-filename"> Vehicle Analysis </span>
+  </div>
+  <img src="images/Vehicle Analysis.png">
+  <div class="img-caption">Vehicle Analysis sheet — a PivotTable and visualisations showing efficiency metrics for different vehicle types.</div>
+    </div>
+
+      <div class="step reveal">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Monthly Trend Analysis</h3>
+          <p>A monthly late rate was computed using COUNTIFS then plotted alongside delivery volume as a Combo Chart — revealing whether demand peaks correlate with quality failures.</p>
+          <div class="code-block">Late Rate % =COUNTIFS(LogisticsData[Month],A2,
+             LogisticsData[DeliveryStatus],"Late")
+            /COUNTIF(LogisticsData[Month],A2)</div>
+        </div>
+      </div>
+
+<div class="screenshot-wrap">
+  <div class ="screen-label">
+    <div class="screen-dots"><span></span><span></span><span></span>
+    </div>
+    <span class = "screen-filename"> Monthly Trend Analysis </span>
+  </div>
+  <img src="images/Monthly Trend.png">
+  <div class="img-caption">Monthly Trend Analysis sheet — a Combo Chart showing the relationship between delivery revenue and late rates over time.</div>
+    </div>
+
+      <div class="step reveal">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h3>Interactive Dashboard Assembly</h3>
+          <p>All charts were moved to a single dashboard sheet. KPI cards were linked live to the KPI Summary. Slicers for Route, Vehicle, and Delivery Status were connected to all PivotTables via <strong>Report Connections</strong> — enabling one-click filtering across every visual simultaneously.</p>
+        </div>
+      </div>
+
+<div class="screenshot-wrap">
+  <div class ="screen-label">
+    <div class="screen-dots"><span></span><span></span><span></span>
+    </div>
+    <span class = "screen-filename"> Dashboard </span>
+  </div>
+  <img src="images/dash.png">
+  <div class="img-caption">Interactive Dashboard — dark-themed with live KPI cards, slicer-driven charts, and key insights panel. All visuals update simultaneously when a slicer is clicked.</div>
+    </div>
+    </div>
+
+    </div><!-- end steps -->
+
+    <div class="reveal">
+      <div class="section-tag" style="margin-top:1rem">Tools Used</div>
+      <div class="tools-row">
+        <span class="tool-pill">Microsoft Excel</span>
+        <span class="tool-pill">PivotTables</span>
+        <span class="tool-pill">PivotCharts</span>
+        <span class="tool-pill">Aggregate formulas / COUNTIFS / COUNTIF</span>
+        <span class="tool-pill">Slicers & Report Connections</span>
+        <span class="tool-pill">Combo Charts</span>
+        <span class="tool-pill">Structured Table References</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- FINDINGS -->
+<section id="findings">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">03 — Key Findings</div>
+      <h2>What the Data Revealed</h2>
+      <p>Four major findings emerged — each representing a real operational problem that structured data practices can directly address.</p>
+    </div>
+    <div class="findings-grid reveal">
+      <div class="finding-card red">
+        <h3>Delivery Reliability Crisis</h3>
+        <div class="finding-stat red">31.2%</div>
+        <p>of all deliveries arrived late — nearly <strong>1 in 3 orders</strong>. Late deliveries averaged 2.2 days overdue, with some running 4 days past deadline.</p>
+      </div>
+      <div class="finding-card orange">
+        <h3>Route D & E Underperformance</h3>
+        <div class="finding-stat orange">407</div>
+        <p>combined late deliveries on the two busiest routes. Routes D and E each recorded over 200 late deliveries and need priority scheduling review.</p>
+      </div>
+      <div class="finding-card blue">
+        <h3>Seasonal Capacity Gaps</h3>
+        <div class="finding-stat blue">Apr–May</div>
+        <p>showed the highest late rates alongside peak delivery volumes — capacity planning does not scale adequately during demand surges.</p>
+      </div>
+      <div class="finding-card green">
+        <h3>Vehicle Allocation Inefficiency</h3>
+        <div class="finding-stat green">R10.58</div>
+        <p>cost per KM for Bikes — the highest of all vehicle types despite fewest deliveries. Vans are cheapest at R9.71/km.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- IMPACT -->
+<section id="impact" class="impact-section">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">04 — Business Impact</div>
+      <h2>How These Insights Drive Revenue Growth</h2>
+      <p>Every finding maps directly to a measurable operational improvement and a real revenue or cost outcome for the company.</p>
+    </div>
+    <table class="reveal">
+      <thead>
+        <tr><th>Finding</th><th>Current State</th><th>Recommended Action</th><th>Business Outcome</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>31% Late Delivery Rate</td>
+          <td><span class="badge badge-red">936 late orders</span></td>
+          <td>Route-level SLA monitoring; flag at-risk deliveries before dispatch using historical delay patterns</td>
+          <td>Higher customer retention, fewer compensation claims, stronger contract renewal rates</td>
+        </tr>
+        <tr>
+          <td>Route D & E Failures</td>
+          <td><span class="badge badge-red">407 combined late</span></td>
+          <td>Investigate scheduling gaps; staggered dispatch or vehicle reallocation on these routes</td>
+          <td>Reducing late rate by 50% on these routes recovers ~200 on-time deliveries protecting SLA bonuses</td>
+        </tr>
+        <tr>
+          <td>Peak Month Capacity Gaps</td>
+          <td><span class="badge badge-orange">Apr & May spikes</span></td>
+          <td>Monthly demand forecast model; pre-position vehicles and staff ahead of peak periods</td>
+          <td>Prevents late rate spikes during highest-revenue months — protecting income when it matters most</td>
+        </tr>
+        <tr>
+          <td>Bike Cost Inefficiency</td>
+          <td><span class="badge badge-red">R10.58/km</span></td>
+          <td>Restrict bikes to short-distance urban deliveries; reassign longer routes to Vans</td>
+          <td>Bringing 291 bike deliveries to Van-level cost efficiency saves R25,000+ annually</td>
+        </tr>
+        <tr>
+          <td>15% Early Deliveries</td>
+          <td><span class="badge badge-green">453 early orders</span></td>
+          <td>Analyse early delivery routes — scheduling slack can absorb additional delivery slots</td>
+          <td>Increase daily capacity without adding vehicles or headcount, improving revenue per asset</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout reveal">
+      <div class="section-tag">The Bottom Line</div>
+      <p>A logistics company generating <strong>R12.9M across 3,000 deliveries</strong> is leaving significant value on the table through avoidable late deliveries, inefficient vehicle routing, and reactive scheduling. Structured data analysis — even in Excel — surfaces these patterns, quantifies their cost, and guides decisions that directly protect revenue and reduce waste. <strong>That is the value a data analyst brings to your operations.</strong></p>
+    </div>
+  </div>
+</section>
+
+<div class="reveal" style="text-align:center;margin:3rem 0">
+  <a href="https://idowu-aluko-portfolio.vercel.app/" target="_blank" class="nav-cta">View Portfolio →</a>
+</div>
+<hr class="divider"/>
+
+<footer>
+  <div>
+    <div class="footer-name">Idowu <span>Aluko</span></div>
+    <div class="footer-copy">Data Analyst · Lagos, Nigeria</div>
+  </div>
+  <div class="footer-links">
+    <a href="https://idowu-aluko-portfolio.vercel.app" target="_blank">Portfolio</a>
+    <a href="mailto:idowualuko58@gmail.com" target="_blank">Mail</a>
+    <a href="https://linkedin.com/in/idowu-aluko" target="_blank">LinkedIn</a>
+    <a href="https://github.com/al3x-id" target="_blank">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(
+    entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
