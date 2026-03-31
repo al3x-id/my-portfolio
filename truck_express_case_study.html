@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Truck Express Analysis Dashboard | Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --primary: #03c4a1;
+    --accent: #c62b88;
+    --text: #777777;
+    --bg: #f5f5f5;
+    --dark: #0e0e14;
+    --dark2: #16161f;
+    --dark3: #1e1e2a;
+    --white: #ffffff;
+    --light-text: #b0b0c0;
+    --border: rgba(3,196,161,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Syne', sans-serif;
+    color: var(--dark);
+    line-height: 1.2;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(14,14,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--white);
+    letter-spacing: 0.3px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--light-text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--primary); }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 5% 80px;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(3,196,161,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(3,196,161,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(3,196,161,0.12) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+
+  .hero-glow-2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(198,43,136,0.1) 0%, transparent 70%);
+    bottom: 0; left: 10%;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 780px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(3,196,161,0.1);
+    border: 1px solid rgba(3,196,161,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero-badge span {
+    width: 6px; height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 6vw, 76px);
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 16px;
+    letter-spacing: -2px;
+  }
+
+  .hero h1 .accent { color: var(--primary); }
+  .hero h1 .accent2 { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--light-text);
+    font-weight: 300;
+    max-width: 560px;
+    margin-bottom: 48px;
+    line-height: 1.8;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hero-meta-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--light-text);
+    font-weight: 500;
+  }
+
+  .hero-meta-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .hero-meta-value.primary { color: var(--primary); }
+
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: var(--dark);
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: #02e0b8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(3,196,161,0.35);
+  }
+
+  .btn-accent {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-accent:hover {
+    background: #e0329a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(198,43,136,0.35);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .btn-github {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+    padding: 13px 24px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .btn-github:hover {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--dark2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 5%;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.white { color: var(--white); }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--light-text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 96px 5%;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+
+  .section-tag.accent { color: var(--accent); }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+
+  .section-desc {
+    font-size: 16px;
+    color: var(--text);
+    max-width: 640px;
+    line-height: 1.8;
+    margin-bottom: 56px;
+  }
+
+  /* ── DARK SECTIONS ── */
+  .dark-section {
+    background: var(--dark);
+    color: var(--light-text);
+  }
+
+  .dark-section .section-title { color: var(--white); }
+  .dark-section .section-desc { color: var(--light-text); }
+  .dark-section h3 { color: var(--white); }
+  .dark-section p { color: var(--light-text); }
+
+  .mid-section {
+    background: var(--dark2);
+  }
+
+  .mid-section .section-title { color: var(--white); }
+  .mid-section .section-desc { color: var(--light-text); }
+  .mid-section h3 { color: var(--white); }
+  .mid-section p { color: var(--light-text); }
+
+  /* ── OVERVIEW ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .overview-text h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--dark);
+  }
+
+  .overview-text p {
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.85;
+  }
+
+  .objectives-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .objectives-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .obj-icon {
+    width: 22px; height: 22px;
+    background: rgba(3,196,161,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .obj-icon::after {
+    content: '✓';
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .why-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .why-card {
+    background: var(--bg);
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .why-card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .why-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+    letter-spacing: 0.2px;
+  }
+
+  .why-card p {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── DATA ENGINEERING ── */
+  .engineering-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .tables-diagram {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+
+  .tables-diagram h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 24px;
+  }
+
+  .table-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .table-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .table-pill {
+    background: rgba(3,196,161,0.08);
+    border: 1px solid rgba(3,196,161,0.2);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary);
+    font-family: 'DM Sans', monospace;
+    white-space: nowrap;
+  }
+
+  .table-pill.accent {
+    background: rgba(198,43,136,0.08);
+    border-color: rgba(198,43,136,0.2);
+    color: var(--accent);
+  }
+
+  .arrow {
+    color: var(--light-text);
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  .view-pill {
+    background: rgba(3,196,161,0.15);
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: 'DM Sans', monospace;
+    white-space: nowrap;
+  }
+
+  .divider-arrow {
+    text-align: center;
+    padding: 16px 0;
+    font-size: 22px;
+    color: var(--primary);
+    opacity: 0.6;
+  }
+
+  .views-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .engineering-text p {
+    font-size: 15px;
+    color: var(--light-text);
+    line-height: 1.85;
+    margin-bottom: 20px;
+  }
+
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 32px 0;
+  }
+
+  .process-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--primary), #02a888);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--dark);
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .step-content p {
+    font-size: 13px;
+    color: var(--light-text);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* ── ANALYTICS ── */
+  .analytics-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+
+  .analytics-card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .analytics-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(3,196,161,0.4);
+  }
+
+  .analytics-card-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .analytics-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .analytics-card p {
+    font-size: 13px;
+    color: var(--light-text);
+    line-height: 1.7;
+  }
+
+  /* ── DASHBOARD SHOWCASE ── */
+  .dashboard-section {
+    margin-bottom: 80px;
+    padding-bottom: 80px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .dashboard-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .dashboard-number {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .dashboard-title-group h3 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 2px;
+  }
+
+  .dashboard-title-group span {
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .dashboard-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .dashboard-image-placeholder {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 2px dashed rgba(3,196,161,0.3);
+    border-radius: 16px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px;
+    text-align: center;
+  }
+
+  .placeholder-icon {
+    font-size: 48px;
+    opacity: 0.5;
+  }
+
+  .placeholder-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    opacity: 0.7;
+    letter-spacing: 0.5px;
+  }
+
+  .placeholder-sub {
+    font-size: 12px;
+    color: var(--light-text);
+    opacity: 0.5;
+  }
+
+  .dashboard-detail h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--primary);
+    margin-bottom: 12px;
+    margin-top: 24px;
+  }
+
+  .dashboard-detail h4:first-child { margin-top: 0; }
+
+  .kpi-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .kpi-tag {
+    background: rgba(3,196,161,0.08);
+    border: 1px solid rgba(3,196,161,0.2);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary);
+  }
+
+  .kpi-tag.accent {
+    background: rgba(198,43,136,0.08);
+    border-color: rgba(198,43,136,0.2);
+    color: var(--accent);
+  }
+
+  .insights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .insights-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .insights-list li::before {
+    content: '→';
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── INSIGHTS ── */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+  }
+
+  .insight-card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .insight-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+  }
+
+  .insight-card.accent-border::before {
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+  }
+
+  .insight-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+
+  .insight-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .insight-card p {
+    font-size: 14px;
+    color: var(--light-text);
+    line-height: 1.75;
+  }
+
+  .insight-stat {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .insight-stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .insight-stat-value.accent { color: var(--accent); }
+
+  .insight-stat-label {
+    font-size: 12px;
+    color: var(--light-text);
+  }
+
+  /* ── BUSINESS IMPACT ── */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .impact-card {
+    background: var(--white);
+    border: 1px solid #e8e8e8;
+    border-radius: 14px;
+    padding: 32px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .impact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+
+  .impact-card-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .impact-icon-wrap {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .impact-icon-wrap.green { background: rgba(3,196,161,0.12); }
+  .impact-icon-wrap.pink { background: rgba(198,43,136,0.12); }
+
+  .impact-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .impact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .impact-list li {
+    font-size: 14px;
+    color: var(--text);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .impact-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .hero-dashboard {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1900 / 1080;
+  object-fit: cover; /* Ensures image covers area without stretching */
+}
+
+  /* ── RECOMMENDATIONS ── */
+  .recs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .rec-card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+  }
+
+  .rec-verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .rec-verdict.yes {
+    background: rgba(3,196,161,0.15);
+    color: var(--primary);
+    border: 1px solid rgba(3,196,161,0.3);
+  }
+
+  .rec-verdict.no {
+    background: rgba(198,43,136,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(198,43,136,0.3);
+  }
+
+  .rec-verdict.maybe {
+    background: rgba(255,200,0,0.1);
+    color: #ffc800;
+    border: 1px solid rgba(255,200,0,0.25);
+  }
+
+  .rec-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .rec-card p {
+    font-size: 13px;
+    color: var(--light-text);
+    line-height: 1.75;
+  }
+
+  /* ── PREDICTIONS ── */
+  .predictions-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .prediction-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 28px;
+    align-items: flex-start;
+  }
+
+  .prediction-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    flex-shrink: 0;
+    margin-top: 6px;
+    box-shadow: 0 0 0 4px rgba(3,196,161,0.15);
+  }
+
+  .prediction-dot.accent {
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(198,43,136,0.15);
+  }
+
+  .prediction-dot.warn {
+    background: #ffc800;
+    box-shadow: 0 0 0 4px rgba(255,200,0,0.15);
+  }
+
+  .prediction-content h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .prediction-content p {
+    font-size: 13px;
+    color: var(--light-text);
+    line-height: 1.65;
+  }
+
+  .risk-box {
+    background: rgba(198,43,136,0.06);
+    border: 1px solid rgba(198,43,136,0.2);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .risk-box h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .risk-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .risk-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--light-text);
+    line-height: 1.6;
+  }
+
+  .risk-list li::before {
+    content: '⚠';
+    color: #ffc800;
+    flex-shrink: 0;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: linear-gradient(135deg, var(--dark) 0%, #0d1a2e 100%);
+    text-align: center;
+    padding: 100px 5%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(3,196,161,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(3,196,161,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 16px;
+    letter-spacing: -1.5px;
+  }
+
+  .cta-section p {
+    font-size: 16px;
+    color: var(--light-text);
+    margin-bottom: 48px;
+    line-height: 1.8;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    padding: 40px 5%;
+    text-align: center;
+  }
+
+  footer p {
+    font-size: 13px;
+    color: var(--light-text);
+  }
+
+  footer a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .overview-grid,
+    .engineering-layout,
+    .dashboard-layout,
+    .impact-grid,
+    .predictions-layout { grid-template-columns: 1fr; }
+
+    .why-cards { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero h1 { letter-spacing: -1px; }
+    .views-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── UTILITIES ── */
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-24 { margin-top: 24px; }
+  .mt-32 { margin-top: 32px; }
+  .mb-0 { margin-bottom: 0; }
+
+  .text-primary { color: var(--primary); }
+  .text-accent { color: var(--accent); }
+  .text-white { color: var(--white); }
+
+  .divider {
+    height: 1px;
+    background: #e8e8e8;
+    margin: 0;
+  }
+
+  .divider-dark {
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* ── LOGO PLACEHOLDER ── */
+  .logo-placeholder {
+    width: 120px; height: 120px;
+    background: var(--dark3);
+    border: 2px dashed rgba(3,196,161,0.4);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .logo-placeholder-text {
+    font-size: 10px;
+    color: var(--primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .logo-placeholder-icon { font-size: 32px; }
+
+  /* ── TECH STACK BADGES ── */
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .tech-badge {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--light-text);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">TE</div>
+    <span class="nav-logo-text">Truck Express</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#engineering">Data Engineering</a></li>
+    <li><a href="#dashboards">Dashboards</a></li>
+    <li><a href="#insights">Insights</a></li>
+    <li><a href="#recommendations">Recommendations</a></li>
+    <li><a href="#cta">Links</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-content">
+    <!--<div class="logo-placeholder">
+      <span class="logo-placeholder-icon">🚛</span>
+      <span class="logo-placeholder-text">Insert Dashboard<br/>Logo Here</span>
+    </div>-->
+    <div class="hero-badge">
+      <span></span>
+      Idowu Aluko Portfolio Case Study
+    </div>
+    <h1>
+      Truck <span class="accent">Express</span><br/>
+      <span class="accent2">Analysis</span> Dashboard
+    </h1>
+    <p class="hero-sub">
+      A full-stack logistics analytics project from raw relational schema to interactive Tableau dashboards uncovering $262M in revenue patterns, fleet performance, and operational efficiency across 3 years of freight data. This dashboard uses a logistics datasets from Kaggle.com.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Period</span>
+        <span class="hero-meta-value">2022 – 2024</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Data Stack</span>
+        <span class="hero-meta-value primary">MySQL + Tableau</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Tables Processed</span>
+        <span class="hero-meta-value">14 → 10 Views</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Dashboards</span>
+        <span class="hero-meta-value">7 Pages</span>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <a href="images/Truck Express Dashboard.pdf" download = "Truck Express Dashboard.pdf" class="btn-primary">View Dashboards</a>
+      <a href="#insights" class="btn-outline">Key Findings</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-value">$262M</div>
+      <div class="stat-label">Total Revenue</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">38.56%</div>
+      <div class="stat-label">Operating Ratio</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">85,410</div>
+      <div class="stat-label">Total Loads</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value white">124</div>
+      <div class="stat-label">Active Drivers</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">120</div>
+      <div class="stat-label">Fleet Trucks</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value accent">44.60%</div>
+      <div class="stat-label">Avg On-Time Rate</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">7</div>
+      <div class="stat-label">Dashboard Pages</div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-inner">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="section-tag">Project Overview</span>
+        <h2 class="section-title">The Business Problem</h2>
+        <p>Truck Express operates a large-scale freight network across the United States, managing over 120 trucks, 150 drivers, and thousands of monthly loads across dozens of origin-destination lanes. Despite generating over $262M in revenue across 2022–2024, the company lacked a unified analytics layer to understand where that revenue was coming from, and more critically, where costs were eroding it.</p>
+        <p>The operational data existed but was fragmented across 14 relational database tables spanning drivers, trucks, trailers, customers, routes, loads, trips, fuel purchases, maintenance records, delivery events, safety incidents, facilities, driver monthly metrics and truck utilization metrics. No single view tied these together into actionable insight.</p>
+        <p>This project was designed to bridge that gap — transforming raw relational data into a 7-page interactive intelligence platform that operations, finance, and executive teams can actually use.</p>
+
+        <h3 class="mt-32" style="font-size:18px; margin-bottom:12px;">Project Objectives</h3>
+        <ul class="objectives-list">
+          <li><span class="obj-icon"></span>Model and consolidate 14 raw tables into 10 optimized MySQL views</li>
+          <li><span class="obj-icon"></span>Identify the most and least profitable routes by revenue per mile</li>
+          <li><span class="obj-icon"></span>Build a driver performance scorecard covering revenue, MPG, on-time rate, and safety</li>
+          <li><span class="obj-icon"></span>Quantify fleet idle time and its direct cost to the business</li>
+          <li><span class="obj-icon"></span>Surface fuel and maintenance cost trends to support cost reduction initiatives</li>
+          <li><span class="obj-icon"></span>Detect seasonal demand patterns to support workforce and capacity planning</li>
+          <li><span class="obj-icon"></span>Deliver a visually professional Tableau dashboard</li>
+        </ul>
+      </div>
+
+      <div>
+        <span class="section-tag accent">Why It Matters</span>
+        <h2 class="section-title" style="font-size:28px; margin-bottom:24px;">Logistics analytics is not a nice-to-have</h2>
+        <div class="why-cards">
+          <div class="why-card">
+            <h4>Revenue Leakage</h4>
+            <p>Underpriced lanes and high-cost routes silently drain margin. Analytics makes the invisible visible.</p>
+          </div>
+          <div class="why-card">
+            <h4>Fuel Is the Largest Variable Cost</h4>
+            <p>Fuel accounted for $95.59M of operating cost, a 1% efficiency gain saves ~$1M annually.</p>
+          </div>
+          <div class="why-card">
+            <h4>Fleet Idle Time</h4>
+            <p>23% of the fleet sits idle at any given time, each idle truck is lost revenue that can be recovered.</p>
+          </div>
+          <div class="why-card">
+            <h4>Driver Quality Variance</h4>
+            <p>Top drivers generate 2x the revenue of bottom-tier drivers. Knowing who is who changes HR decisions.</p>
+          </div>
+        </div>
+
+        <div class="tech-stack">
+          <span class="tech-badge">MySQL Workbench</span>
+          <span class="tech-badge">SQL Views</span>
+          <span class="tech-badge">Tableau Public</span>
+          <span class="tech-badge">CTEs</span>
+          <span class="tech-badge">Window Functions</span>
+          <span class="tech-badge">NTILE</span>
+          <span class="tech-badge">LEFT JOIN</span>
+          <span class="tech-badge">GROUP BY</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DATA ENGINEERING -->
+<section id="engineering" class="dark-section">
+  <div class="section-inner">
+    <div class="engineering-layout">
+      <div>
+        <div class="tables-diagram">
+          <h4>Schema → Views Architecture</h4>
+          <div class="table-flow">
+            <p style="font-size:12px; color:var(--light-text); margin-bottom:8px;">14 Raw Tables</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+              <span class="table-pill">drivers</span>
+              <span class="table-pill">trucks</span>
+              <span class="table-pill">trailers</span>
+              <span class="table-pill">customers</span>
+              <span class="table-pill">facilities</span>
+              <span class="table-pill">routes</span>
+              <span class="table-pill">loads</span>
+              <span class="table-pill">trips</span>
+              <span class="table-pill">fuel_purchases</span>
+              <span class="table-pill">maintenance_records</span>
+              <span class="table-pill">delivery_events</span>
+              <span class="table-pill">safety_incidents</span>
+              <span class="table-pill accent">driver_monthly_metrics</span>
+              <span class="table-pill accent">truck_utilization_metrics</span>
+            </div>
+            <div class="divider-arrow">↓ MySQL Views ↓</div>
+            <p style="font-size:12px; color:var(--light-text); margin-bottom:8px;">7 Optimized Views</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <span class="view-pill">executive_overview</span>
+              <span class="view-pill">route_customer_profitability</span>
+              <span class="view-pill">truck_performance</span>
+              <span class="view-pill">revenue_per_truck</span>
+              <span class="view-pill">trailer_utilization</span>
+              <span class="view-pill">driver_performance_safety</span>
+              <span class="view-pill">fuel_cost</span>
+              <span class="view-pill">maintenance</span>
+              <span class="view-pill">safety_metrics_compliance</span>
+              <span class="view-pill">seasonal_patterns_demand_trends</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="engineering-text">
+        <span class="section-tag">Data Engineering</span>
+        <h2 class="section-title text-white">From 14 Tables to 10 Production Views</h2>
+        <p>The raw schema was a normalized relational database built for transactional integrity, not analytical consumption. Each table served a specific operational purpose but had no awareness of the broader business picture. The first engineering challenge was designing a transformation layer that preserved data accuracy while making it analytically usable.</p>
+        <p>MySQL views were chosen over flat tables to ensure the analytical layer always reflects the most current underlying data.</p>
+
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Schema Analysis & Relationship Mapping</h4>
+              <p>Mapped all 14 table relationships — one-to-one, one-to-many, and many-to-one — to identify correct join paths and avoid row duplication in aggregated views.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Pre-Aggregation of High-Cardinality Tables</h4>
+              <p>Tables like fuel_purchases and maintenance_records were aggregated via subqueries and CTEs before joining to base tables, preventing row multiplication in merged views.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Calculated Fields & Derived Metrics</h4>
+              <p>Revenue per mile, fuel cost per mile, operating ratio, incident rate per 100 trips, driver tenure, and performance tiers were all computed directly in SQL using arithmetic expressions, DATEDIFF, and NTILE window functions.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>View Creation & Tableau Connection</h4>
+              <p>Each view was scoped to a specific dashboard page — one view per page — keeping Tableau queries lean, fast, and purpose-built for their visualization context.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <h4>Data Validation</h4>
+              <p>Row counts, revenue totals, and cost sums were cross-validated against base table aggregates to confirm the views produced accurate, non-duplicated results before connecting to Tableau.</p>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://github.com/al3x-id/Truck-Express-Database-Join-SQL-Query/blob/771d0f61fc16e53538fa20d9e55183df7c4af04b/merge_script.sql" target="_blank" class="btn-github" style="margin-top:8px;">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          View SQL Merge Queries on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-dark"></div>
+
+<!-- ANALYTICS DEVELOPMENT -->
+<section class="mid-section">
+  <div class="section-inner">
+    <span class="section-tag">Analytics Development</span>
+    <h2 class="section-title text-white">From SQL Views to Tableau Intelligence</h2>
+    <p class="section-desc" style="color:var(--light-text);">Once the 7 views were validated in MySQL, they were connected directly to Tableau Public as live data sources. Each view fed a dedicated dashboard page, keeping the workbook clean and the visualization logic separated from the data transformation logic.</p>
+
+    <div class="analytics-cards">
+      <div class="analytics-card">
+        <h3>133+ SQL Queries</h3>
+        <p>Every metric on every dashboard page is backed by a purpose-written query — from single KPI aggregates to multi-join ranked lists and time-series trend tables.</p>
+      </div>
+      <div class="analytics-card">
+        <h3>KPI Card Design</h3>
+        <p>Each dashboard page opens with 4–5 headline KPIs — total revenue, operating ratio, on-time rate, incident rate — giving stakeholders an instant top-line read before diving into charts.</p>
+      </div>
+      <div class="analytics-card">
+        <h3>Calculated Fields in Tableau</h3>
+        <p>Revenue per mile, performance tier classification, operating ratio, and on-time rate were computed as Tableau calculated fields layered on top of the SQL views for interactive flexibility.</p>
+      </div>
+      <div class="analytics-card">
+        <h3>Dark Theme Design System</h3>
+        <p>A consistent dark navy palette (#1A1A2E background, #03C4A1 primary, #C62B88 accent) was applied across all 7 pages, with color encoding carrying analytical meaning throughout.</p>
+      </div>
+      <div class="analytics-card">
+        <h3>Interactive Filters & Actions</h3>
+        <p>Year, booking type, route, driver tier, and incident type filters are connected across sheets via Tableau dashboard actions, enabling drill-down exploration without leaving the page.</p>
+      </div>
+      <div class="analytics-card">
+        <h3>Geographic Visualization</h3>
+        <p>Fuel cost per location is visualized on a US state-level filled map, giving operations teams an immediate geographic view of where fuel spend is concentrated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DASHBOARDS -->
+<section id="dashboards">
+  <div class="section-inner">
+    <span class="section-tag">Dashboard Showcase</span>
+    <h2 class="section-title">7 Pages. One Complete Picture.</h2>
+    <p class="section-desc">Each dashboard page answers a specific business question, from executive revenue oversight to safety compliance designed to serve different organizational stakeholders.</p>
+    
+    <!-- D1: Executive Overview -->
+    <div class="dashboard-section">
+      <div class="dashboard-header">
+        <div class="dashboard-number">1</div>
+        <div class="dashboard-title-group">
+          <h3>Executive Summary</h3>
+          <span>Revenue, cost, and operational health at a glance</span>
+        </div>
+      </div>
+      <div class="dashboard-layout">
+        <div class="dashboard-image-placeholder">
+          <img src="images/Executive Summary.png" alt="Executive Summary Dashboard" class="hero-dashboard" >
+         <!-- <div class="placeholder-icon">📈</div>
+          <div class="placeholder-text">Insert Executive Summary Dashboard Image Here</div>
+          <div class="placeholder-sub">Recommended: 1920×1080px screenshot from Tableau</div>-->
+        </div>
+        <div class="dashboard-detail">
+          <h4>Key KPIs</h4>
+          <div class="kpi-tags">
+            <span class="kpi-tag">$262.53M Revenue</span>
+            <span class="kpi-tag">$101.23M Operating Cost</span>
+            <span class="kpi-tag">38.56% Operating Ratio</span>
+            <span class="kpi-tag">85,410 Total Loads</span>
+          </div>
+
+          <h4>Visualizations</h4>
+          <ul class="insights-list">
+            <li>Dual-line chart showing monthly Revenue vs Operating Cost from Dec 2021 to Dec 2024 — reveals consistent cost discipline with revenue staying well above cost throughout the period</li>
+            <li>Two donut charts breaking down total loads and revenue by booking type: Contract, Spot, and Dedicated — Dedicated loads represent 49.6% of revenue at $130.24M</li>
+            <li>Sparkline KPI cards with mini trend lines for at-a-glance directional context</li>
+          </ul>
+
+          <h4>Key Insights</h4>
+          <ul class="insights-list">
+            <li>Operating ratio of 38.56% is exceptionally healthy — industry benchmark is below 95%, meaning the company spends just $0.39 for every $1.00 earned</li>
+            <li>Dedicated contract loads dominate revenue ($130.24M) but spot loads (21,528) and contract loads (21,545) are near-equally split by volume, suggesting pricing power on spot remains strong</li>
+            <li>Revenue shows no sustained decline over 3 years, a sign of stable demand and consistent customer relationships</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- D2: Segment Profitability -->
+    <div class="dashboard-section">
+      <div class="dashboard-header">
+        <div class="dashboard-number">2</div>
+        <div class="dashboard-title-group">
+          <h3>Segment Profitability</h3>
+          <span>Route performance and customer revenue analysis</span>
+        </div>
+      </div>
+      <div class="dashboard-layout">
+        <div class="dashboard-image-placeholder">
+            <img src="images/Segment Profitability.png" alt="Segment Profitability Dashboard" class="hero-dashboard" >
+          <!--<div class="placeholder-icon">🗺️</div>
+          <div class="placeholder-text">Insert Segment Profitability Dashboard Image Here</div>
+          <div class="placeholder-sub">Recommended: 1920×1080px screenshot from Tableau</div>-->
+        </div>
+        <div class="dashboard-detail">
+          <h4>Key KPIs</h4>
+          <div class="kpi-tags">
+            <span class="kpi-tag">58 Total Routes</span>
+            <span class="kpi-tag">$2.20 Avg Rev/Mile</span>
+            <span class="kpi-tag">PA-NY Best Lane</span>
+            <span class="kpi-tag accent">NV-NY Worst Lane</span>
+          </div>
+
+          <h4>Visualizations</h4>
+          <ul class="insights-list">
+            <li>Side-by-side horizontal bar charts showing Top 10 Performing Routes and Top 10 Underperforming Routes by revenue per mile</li>
+            <li>Top 10 Customers by Revenue and Top 10 Customers by Load Count — two separate rankings revealing that high-frequency shippers are not always the highest-revenue accounts</li>
+          </ul>
+
+          <h4>Key Insights</h4>
+          <ul class="insights-list">
+            <li>PA-NY leads all lanes at $2.78/mile — 26% above the fleet average of $2.20/mile — a lane worth protecting and potentially expanding capacity on</li>
+            <li>NV-NY sits at the bottom at $1.53/mile — 30% below average — a strong candidate for rate renegotiation or load optimization</li>
+            <li>First Group leads customers by revenue at $9.14M and load count at 2,116 — suggesting First groups ships more frequently  at high per-load rates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+<!-- D3: Fleet Utilization -->
+    <div class="dashboard-section">
+      <div class="dashboard-header">
+        <div class="dashboard-number">3</div>
+        <div class="dashboard-title-group">
+          <h3>Fleet Utilization</h3>
+          <span>Asset performance, idle analysis, and trailer breakdown</span>
+        </div>
+      </div>
+      <div class="dashboard-layout">
+        <div class="dashboard-image-placeholder">
+            <img src="images/Fleet Utilization.png" alt="Fleet Utilization Dashboard" class="hero-dashboard" >
+          <!--<div class="placeholder-icon">🚛</div>
+          <div class="placeholder-text">Insert Fleet Utilization Dashboard Image Here</div>
+          <div class="placeholder-sub">Recommended: 1920×1080px screenshot from Tableau</div>-->
+        </div>
+        <div class="dashboard-detail">
+          <h4>Key KPIs</h4>
+          <div class="kpi-tags">
+            <span class="kpi-tag">120 Trucks</span>
+            <span class="kpi-tag">$21.85M Fleet Revenue</span>
+            <span class="kpi-tag">$79.16K Avg Rev/Truck</span>
+            <span class="kpi-tag accent">23% Idle Rate</span>
+            <span class="kpi-tag">37K Avg Miles</span>
+          </div>
+
+          <h4>Visualizations</h4>
+          <ul class="insights-list">
+            <li>Active vs Idle donut — 77% active, 23% idle — 28 trucks generating zero revenue at any given time</li>
+            <li>Revenue Per Truck and Miles Per Truck bar charts — identifies top and bottom performing assets</li>
+            <li>Revenue & Trip by Trailer Type donut — Dry Van leads at $133.83M across 43,526 trips; Refrigerated at $123.50M across 40,204 trips</li>
+            <li>Truck Age vs Maintenance Cost scatter — older trucks cluster at higher maintenance cost, quantifying the aging fleet risk</li>
+          </ul>
+
+          <h4>Key Insights</h4>
+          <ul class="insights-list">
+            <li>23% idle rate means roughly 28 trucks are not generating revenue — at the fleet average of $79.16K per truck, recovering even half of that idle capacity adds ~$1.1M annually</li>
+            <li>Dry Van and Refrigerated trailers handle nearly 99% of trip volume — the "Others" category ($5.20M, 1,680 trips) may represent specialty underutilized assets</li>
+            <li>Truck age shows a clear positive correlation with maintenance cost — a data-backed case for fleet renewal planning</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- D4: Driver Performance -->
+    <div class="dashboard-section">
+      <div class="dashboard-header">
+        <div class="dashboard-number">4</div>
+        <div class="dashboard-title-group">
+          <h3>Driver Performance</h3>
+          <span>Revenue, safety, MPG, and on-time rate per driver</span>
+        </div>
+      </div>
+      <div class="dashboard-layout">
+        <div class="dashboard-image-placeholder">
+            <img src="images/Driver Performance.png" alt="Driver Performance Dashboard" class="hero-dashboard" >
+            <img src="images/Driver Performance Scoreboard.png" alt="Driver Performance Scoreboard" class="hero-dashboard" >
+          <!--<div class="placeholder-icon">👤</div>
+          <div class="placeholder-text">Insert Driver Performance Dashboard Image Here</div>
+          <div class="placeholder-sub">Recommended: 1920×1080px screenshot from Tableau</div>-->
+        </div>
+        <div class="dashboard-detail">
+          <h4>Key KPIs</h4>
+          <div class="kpi-tags">
+            <span class="kpi-tag">124 Active Drivers out of 150</span>
+            <span class="kpi-tag">6,084 Incidents</span>
+            <span class="kpi-tag">7% Incident Rate</span>
+            <span class="kpi-tag">6.50 Avg MPG</span>
+            <span class="kpi-tag accent">44.60% On-Time Rate</span>
+          </div>
+
+          <h4>Visualizations</h4>
+          <ul class="insights-list">
+            <li>Performance Tier donut: 124 drivers segmented into Top Performer (42), Mid Performer (41), and Low Performer (41) tiers — near-even distribution across tiers</li>
+            <li>Top 10 Drivers by Revenue — horizontal bar showing the top revenue contributors, led by Linda Davis at ~$2.31M each</li>
+            <li>MPG vs Incident Rate scatter plot — all 124 drivers plotted, revealing whether fuel-efficient drivers correlate with safer driving behavior</li>
+            <li>Revenue vs On-Time Rate scatter — surfaces whether high-revenue drivers are also reliable on delivery schedules</li>
+          </ul>
+
+          <h4>Key Insights</h4>
+          <ul class="insights-list">
+            <li>Top performers (42 drivers) are generating disproportionate revenue — investing in this cohort through incentives and preferred route allocation would maximize fleet ROI</li>
+            <li>44.60% average on-time rate is critically low — industry standard is 95%+ — signaling systemic issues with scheduling, routing, or driver planning</li>
+            <li>The Driver Score Board (separate sheet) provides full individual-level drill-down across revenue, MPG, on-time rate, hire date, and incident rate for all 124 drivers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- D5: Fuel & Maintenance -->
+    <div class="dashboard-section">
+      <div class="dashboard-header">
+        <div class="dashboard-number">5</div>
+        <div class="dashboard-title-group">
+          <h3>Fuel &amp; Maintenance</h3>
+          <span>Cost control, efficiency trends, and downtime analysis</span>
+        </div>
+      </div>
+      <div class="dashboard-layout">
+        <div class="dashboard-image-placeholder">
+            <img src="images/Fuel & Maintenance Cost.png" alt="Fuel and Maintenance Dashboard" class="hero-dashboard" >
+            <img src="images/Fuel & Maintenance Cost Location.png" alt="Fuel Cost by Location" class="hero-dashboard" >
+           <!--
+          <div class="placeholder-icon">⛽</div>
+          <div class="placeholder-text">Insert Fuel & Maintenance Dashboard Image Here</div>
+          <div class="placeholder-sub">Recommended: 1920×1080px screenshot from Tableau</div>-->
+        </div>
+        <div class="dashboard-detail">
+          <h4>Key KPIs</h4>
+          <div class="kpi-tags">
+            <span class="kpi-tag">$95.59M Fuel Cost</span>
+            <span class="kpi-tag">$0.68 Fuel/Mile</span>
+            <span class="kpi-tag">$5.73M Maintenance Cost</span>
+            <span class="kpi-tag accent">3,010 Downtime Days</span>
+          </div>
+
+          <h4>Visualizations</h4>
+          <ul class="insights-list">
+            <li>Fuel vs Maintenance Cost by Month dual-line chart — both cost lines show volatility, with fuel peaking at $2.90M in individual months</li>
+            <li>US state-level filled map showing Fuel Cost per Location — Texas ($7.64M) and Tennessee ($7.62M) are the highest-cost fuel states</li>
+            <li>Top 10 Most Expensive Trucks to Maintain — TRK00003 leads at $90.16K total maintenance spend</li>
+            <li>Maintenance Cost by Type bar chart — Preventive ($963K), Repair ($945K), Tire ($919K), Brake ($912K), Engine ($891K), Transmission ($880K) — a remarkably even distribution</li>
+          </ul>
+
+          <h4>Key Insights</h4>
+          <ul class="insights-list">
+            <li>Fuel at $95.59M represents 94.3% of total operating costs — making fuel efficiency the single highest-leverage cost reduction target in the entire business</li>
+            <li>Texas and Tennessee fuel spend likely correlate with high trip density through those states — route optimization through cheaper-fuel corridors could yield meaningful savings</li>
+            <li>3,010 downtime days over 3 years equates to roughly 8.2 truck-years of lost capacity — a quantifiable cost of deferred maintenance decisions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- D6: Safety Metrics -->
+    <div class="dashboard-section">
+      <div class="dashboard-header">
+        <div class="dashboard-number">6</div>
+        <div class="dashboard-title-group">
+          <h3>Safety Metrics</h3>
+          <span>Incident analysis, compliance, and risk by route and driver</span>
+        </div>
+      </div>
+      <div class="dashboard-layout">
+        <div class="dashboard-image-placeholder">
+            <img src="images/Safety Metrics.png" alt="Safety Metrics Dashboard" class="hero-dashboard" >
+          <!--<div class="placeholder-icon">🛡️</div>
+          <div class="placeholder-text">Insert Safety Metrics Dashboard Image Here</div>
+          <div class="placeholder-sub">Recommended: 1920×1080px screenshot from Tableau</div>-->
+        </div>
+        <div class="dashboard-detail">
+          <h4>Key KPIs</h4>
+          <div class="kpi-tags">
+            <span class="kpi-tag">170 Total Incidents</span>
+            <span class="kpi-tag">$2.65M Incident Cost</span>
+            <span class="kpi-tag accent">37.65% Preventable Rate</span>
+            <span class="kpi-tag">64 Preventable</span>
+          </div>
+
+          <h4>Visualizations</h4>
+          <ul class="insights-list">
+            <li>Incident Cost Trend line chart — monthly incident costs are highly volatile, spiking to $176.5K in one month — identifying high-risk periods for targeted intervention</li>
+            <li>Incident by Type bar — DOT Violations (39) and Equipment Damage (35) lead, followed by Accidents (35) and Customer Complaints (34)</li>
+            <li>Top 10 Dangerous Routes — OH-OR leads with 10 incidents; WA-TX and MN-GA at 6 each — geographic safety hotspots that demand operational review</li>
+            <li>Preventable Flag donut — 64 preventable vs 106 unpreventable — 37.65% of incidents were avoidable with better training or protocols</li>
+          </ul>
+
+          <h4>Key Insights</h4>
+          <ul class="insights-list">
+            <li>DOT Violations (39) are the most frequent incident type — a direct regulatory and insurance risk that targeted compliance training could address immediately</li>
+            <li>$2.65M in incident costs over 3 years averages $883K/year — preventable incidents at 37.65% represent ~$332K/year in avoidable cost</li>
+            <li>OH-OR route with 10 incidents warrants an immediate operational audit — whether it's the terrain, schedule pressure, or specific drivers on that lane</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- D7: Seasonal Patterns -->
+    <div class="dashboard-section">
+      <div class="dashboard-header">
+        <div class="dashboard-number">7</div>
+        <div class="dashboard-title-group">
+          <h3>Seasonal Patterns</h3>
+          <span>Demand trends, quarterly splits, and route seasonality</span>
+        </div>
+      </div>
+      <div class="dashboard-layout">
+        <div class="dashboard-image-placeholder">
+            <img src="images/Seasonal Patterns.png" alt="Seasonal Patterns Dashboard" class="hero-dashboard" >
+          <!--<div class="placeholder-icon">📅</div>
+          <div class="placeholder-text">Insert Seasonal Patterns Dashboard Image Here</div>
+          <div class="placeholder-sub">Recommended: 1920×1080px screenshot from Tableau</div>-->
+        </div>
+        <div class="dashboard-detail">
+          <h4>Key KPIs</h4>
+          <div class="kpi-tags">
+            <span class="kpi-tag">August 2022 Peak</span>
+            <span class="kpi-tag accent">February 2023 Slowest</span>
+            <span class="kpi-tag">$7.72M Peak Revenue</span>
+            <span class="kpi-tag">$6.57M Off-Peak</span>
+            <span class="kpi-tag">2,373 Avg Monthly Loads</span>
+          </div>
+
+          <h4>Visualizations</h4>
+          <ul class="insights-list">
+            <li>Monthly Load Volume vs Revenue dual-axis line chart — 3-year view showing the relationship between volume fluctuations and revenue response</li>
+            <li>Booking Type Quarterly Load Split table — Contract, Dedicated, and Spot loads are remarkably stable across all four quarters, suggesting demand is relatively non-seasonal</li>
+            <li>Route Demand Heatmap by quarter — color-encoded table showing which lanes experience highest demand in which quarters</li>
+          </ul>
+
+          <h4>Key Insights</h4>
+          <ul class="insights-list">
+            <li>Demand is more stable than seasonal — the $1.15M gap between peak and off-peak revenue is relatively modest for a $262M/year operation, suggesting strong contract-based demand smoothing</li>
+            <li>Booking type splits are near-identical across all four quarters — Dedicated loads maintain ~10,500 per quarter regardless of season — a highly predictable revenue base</li>
+            <li>February consistently underperforms — capacity and cost management during this window (reduced headcount, deferred non-critical maintenance) could improve off-peak margin</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INSIGHTS -->
+<section id="insights" class="dark-section">
+  <div class="section-inner">
+    <span class="section-tag">Key Findings</span>
+    <h2 class="section-title">What the Data Actually Says</h2>
+    <p class="section-desc">Six findings that cut through the noise and tell the real story of this freight operation.</p>
+
+    <div class="insights-grid">
+      <div class="insight-card">
+        <h3>Revenue Health Is Strong — But Margin Needs Work</h3>
+        <p>Total revenue of $262.53M against $101.23M in operating costs produces a strong headline. However, the 44.60% on-time delivery rate suggests significant service-level risk — customers experiencing late deliveries may negotiate lower rates or leave, threatening future revenue without immediately showing in cost metrics.</p>
+        <div class="insight-stat">
+          <span class="insight-stat-value">38.56%</span>
+          <span class="insight-stat-label">Operating Ratio — best-in-class performance</span>
+        </div>
+      </div>
+
+      <div class="insight-card accent-border">
+        <h3>Route Profitability Has a Wide Spread</h3>
+        <p>The revenue per mile spread between the best lane (PA-NY at $2.78) and worst lane (NV-NY at $1.53) is 82% — meaning the worst lane generates almost half the revenue per mile of the best. With 58 routes in the network, standardizing lane pricing to even approach the median would materially improve total revenue.</p>
+        <div class="insight-stat">
+          <span class="insight-stat-value accent">$1.25</span>
+          <span class="insight-stat-label">Revenue per mile gap between best and worst lane</span>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <h3>Fuel Is the Dominant Cost Variable</h3>
+        <p>At $95.59M, fuel represents 94.3% of total operating cost — dwarfing maintenance at $5.73M. This concentration means fleet-wide MPG improvement, smarter fueling location selection, and route optimization against fuel-cost corridors are far more impactful than any maintenance efficiency program.</p>
+        <div class="insight-stat">
+          <span class="insight-stat-value">$0.68</span>
+          <span class="insight-stat-label">Average fuel cost per mile — industry benchmark is $0.55–$0.70</span>
+        </div>
+      </div>
+
+      <div class="insight-card accent-border">
+        <h3>23% Fleet Idle Rate Is a Hidden Revenue Leak</h3>
+        <p>With 28 trucks sitting idle at any given time and an average revenue per truck of $79.16K, the theoretical revenue opportunity from recovering idle capacity is over $2.2M — without hiring a single new driver or acquiring a single new truck. Idle reduction is the fastest path to revenue growth in this fleet.</p>
+        <div class="insight-stat">
+          <span class="insight-stat-value accent">28</span>
+          <span class="insight-stat-label">Idle trucks at any given time — recoverable capacity</span>
+        </div>
+      </div>
+
+      <div class="insight-card">
+        <h3>Driver Tier Concentration Drives Revenue Risk</h3>
+        <p>With 124 drivers split near-evenly across three performance tiers, one-third of the driver base (the low performer tier) is generating significantly below-average revenue. The top 10 drivers alone contribute an estimated $23M+ — roughly 8.7% of total revenue from fewer than 10% of drivers. This concentration creates operational fragility.</p>
+        <div class="insight-stat">
+          <span class="insight-stat-value">$2.31M</span>
+          <span class="insight-stat-label">Revenue from top individual driver — Linda Davis</span>
+        </div>
+      </div>
+
+      <div class="insight-card accent-border">
+        <h3>37.65% of Incidents Were Preventable</h3>
+        <p>64 of 170 incidents over 3 years were classified as preventable — meaning they could have been avoided with better training, protocol adherence, or vehicle maintenance. At the average incident cost of $15.6K per preventable incident, eliminating them entirely saves roughly $332K per year in damage, legal, and compliance costs.</p>
+        <div class="insight-stat">
+          <span class="insight-stat-value accent">$332K</span>
+          <span class="insight-stat-label">Annual savings from eliminating preventable incidents</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-dark"></div>
+
+<!-- BUSINESS IMPACT -->
+<section id="impact">
+  <div class="section-inner">
+    <span class="section-tag">Business Impact</span>
+    <h2 class="section-title">How These Insights Move the Needle</h2>
+    <p class="section-desc">Here is how each finding translates into concrete operational and financial outcomes.</p>
+
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="impact-card-top">
+          <h3>Revenue Growth Opportunities</h3>
+        </div>
+        <ul class="impact-list">
+          <li>Repricing underperforming lanes (bottom 10 routes) to the fleet average revenue per mile of $2.20 could add an estimated $8–12M in annual revenue from existing loads</li>
+          <li>Recovering 50% of idle fleet capacity (14 trucks) at average revenue per truck adds ~$1.1M without capital expenditure</li>
+          <li>Shifting volume toward high-revenue lanes like PA-NY ($2.78/mile) through customer incentives or broker negotiations increases per-mile yield</li>
+          <li>Top customer concentration analysis enables targeted upselling of Dedicated contracts to the high-frequency, lower-rate accounts like First Logistics</li>
+        </ul>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-card-top">
+          <h3>Cost Reduction Targets</h3>
+        </div>
+        <ul class="impact-list">
+          <li>A 5% improvement in fleet-wide MPG (from 6.50 to 6.83) would reduce fuel consumption and save approximately $4.8M annually at current fuel prices</li>
+          <li>Eliminating preventable incidents saves $332K/year in damage and compliance costs with no capital investment — only training</li>
+          <li>Proactive retirement of the top 10 highest-maintenance trucks (averaging $75K+ in maintenance spend each) reduces unplanned downtime and frees budget for fleet renewal</li>
+          <li>Optimizing fueling locations away from Texas and Tennessee high-cost states where operationally feasible could reduce per-gallon costs across high-frequency routes</li>
+        </ul>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-card-top">
+          <h3>Delivery Performance</h3>
+        </div>
+        <ul class="impact-list">
+          <li>Addressing the 44.60% on-time rate is the single highest-urgency operational priority — below 50% is a customer retention risk for all contract customers</li>
+          <li>Identifying the specific routes and drivers with the lowest on-time rates allows targeted scheduling intervention rather than fleet-wide policy changes</li>
+          <li>February historically underperforms — pre-positioning drivers and trucks in high-demand corridors before Q1 begins could lift the off-peak on-time rate measurably</li>
+          <li>Reducing 3,010 downtime days through predictive maintenance scheduling would directly add available trucks back to service during peak demand periods</li>
+        </ul>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-card-top">
+          <h3>Fleet Optimization</h3>
+        </div>
+        <ul class="impact-list">
+          <li>The Truck Age vs Maintenance Cost scatter plot provides a data-driven retirement schedule — trucks above the cost inflection point are candidates for immediate replacement</li>
+          <li>Trailer type analysis shows Dry Van and Refrigerated trailers handle 99%+ of volume — the "Others" category represents potential asset reallocation or disposal candidates</li>
+          <li>Monthly fleet utilization trends by route reveal which lanes consistently require more trucks — informing targeted capacity deployment rather than blanket fleet expansion</li>
+          <li>Driver-truck pairing optimization using MPG data can reduce fuel spend by assigning the most fuel-efficient drivers to the highest-mileage routes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RECOMMENDATIONS -->
+<section id="recommendations" class="dark-section">
+  <div class="section-inner">
+    <span class="section-tag">Strategic Recommendations</span>
+    <h2 class="section-title">What Should the Company Do Next?</h2>
+    <p class="section-desc">Six data-backed strategic decisions, each with a clear verdict and rationale drawn directly from the analysis.</p>
+
+    <div class="recs-grid">
+      <div class="rec-card">
+        <div class="rec-verdict no">✗ Not Yet</div>
+        <h3>Should They Acquire More Trucks?</h3>
+        <p>No — not before addressing the 23% idle rate. With 28 trucks already generating zero revenue, adding trucks without solving dispatch inefficiency and route coverage gaps would only increase fixed costs. The priority is maximizing utilization of the existing 120-truck fleet first. Revisit acquisition when idle rate drops below 10%.</p>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-verdict no">✗ Not Yet</div>
+        <h3>Should They Hire More Drivers?</h3>
+        <p>No — not before addressing the on-time rate. The 44.60% on-time rate is not a capacity problem; it is a scheduling, routing, or driver quality problem. Adding drivers to a broken process amplifies the problem. The focus should be upskilling the Low Performer tier (41 drivers) and addressing the root causes of late deliveries before expanding headcount.</p>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-verdict yes">✓ Immediate Priority</div>
+        <h3>Should They Optimize Routes?</h3>
+        <p>Yes — this is the highest-ROI initiative available. The $1.25/mile gap between the best and worst lanes, combined with the geographic concentration of high-cost fueling states, means route optimization delivers both revenue uplift (better lane pricing) and cost reduction (lower fuel spend) simultaneously. Start with the bottom 10 underperforming lanes.</p>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-verdict yes">✓ Immediate Priority</div>
+        <h3>Should They Reduce Idle Time?</h3>
+        <p>Yes — this is effectively free revenue. The 28 idle trucks represent over $2.2M in recoverable revenue capacity with no additional capital expenditure. Implementing dynamic load matching, reducing empty mile runs, and tightening dispatch scheduling are all operational levers that pay back immediately.</p>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-verdict yes">✓ High Impact</div>
+        <h3>Should They Invest in Safety Training?</h3>
+        <p>Yes — 37.65% preventable incident rate is both a cost problem ($332K/year) and a regulatory risk. DOT Violations are the most frequent incident type, which carries insurance premium implications beyond direct damage costs. A targeted compliance and defensive driving program for the highest-risk driver cohort has a highly favorable cost-benefit ratio.</p>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-verdict maybe">◎ Plan Within 12 Months</div>
+        <h3>Should They Renew the Aging Fleet?</h3>
+        <p>Yes — but on a data-driven schedule. The Truck Age vs Maintenance Cost scatter identifies specific trucks above the cost inflection point. Rather than a blanket fleet renewal, a targeted retirement of the top 10–15 highest-maintenance trucks in the next 12–18 months reduces unplanned downtime, lowers per-mile maintenance cost, and improves driver satisfaction on newer equipment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-dark"></div>
+
+<!-- PREDICTIONS -->
+<section id="predictions" class="mid-section">
+  <div class="section-inner">
+    <span class="section-tag">Forward-Looking Analysis</span>
+    <h2 class="section-title text-white">What the Trends Suggest About 2025 and Beyond</h2>
+    <p class="section-desc" style="color:var(--light-text);">Based on 3 years of observed patterns, here is what the data signals about where this business is heading.</p>
+
+    <div class="predictions-layout">
+      <div>
+        <div class="prediction-item">
+          <div class="prediction-dot"></div>
+          <div class="prediction-content">
+            <h4>Revenue Will Remain Stable With Modest Growth</h4>
+            <p>The near-flat monthly revenue trend across 2022–2024 — oscillating between $6.57M and $7.72M — suggests a mature, stable demand base. Without new lane expansion or customer acquisition, 2025 revenue is projected to remain in the $7.0–7.5M/month range. Meaningful growth requires either new customer wins or rate increases on existing lanes.</p>
+          </div>
+        </div>
+
+        <div class="prediction-item">
+          <div class="prediction-dot"></div>
+          <div class="prediction-content">
+            <h4>Dedicated Contract Volume Will Continue Dominating</h4>
+            <p>Dedicated loads have maintained ~10,500 per quarter across all four quarters for 3 years with zero seasonal degradation. This segment will continue to anchor revenue. The strategic play is converting high-frequency spot customers (like First Logistics at 2,116 loads) to dedicated contracts — locking in volume and improving planning certainty.</p>
+          </div>
+        </div>
+
+        <div class="prediction-item">
+          <div class="prediction-dot accent"></div>
+          <div class="prediction-content">
+            <h4>Maintenance Costs Will Rise if Deferred</h4>
+            <p>The truck age distribution indicates a meaningful portion of the fleet is entering the 7–11 year range — historically the zone where maintenance cost acceleration begins. Without a structured retirement and renewal plan, maintenance spend (currently $5.73M) could increase 20–35% over the next 3 years, compressing margins.</p>
+          </div>
+        </div>
+
+        <div class="prediction-item">
+          <div class="prediction-dot accent"></div>
+          <div class="prediction-content">
+            <h4>Fuel Cost Volatility Remains the Largest Earnings Risk</h4>
+            <p>Fuel prices showed significant month-to-month volatility throughout the analysis period. With fuel at 94.3% of operating costs, a 10% fuel price increase translates to approximately $9.6M in additional annual cost. Fuel hedging or surcharge pass-through mechanisms with customers deserve serious consideration as a risk management strategy.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="risk-box">
+          <h4>⚠ Key Risk Areas to Monitor in 2025</h4>
+          <ul class="risk-list">
+            <li>On-time rate deterioration below 40% would signal systemic scheduling failure and could trigger customer contract reviews — monitor monthly and set a 45% floor as an early warning trigger</li>
+            <li>DOT Violation frequency is the most actionable safety risk — a spike in violations creates regulatory scrutiny that can ground trucks and interrupt revenue operations with no warning</li>
+            <li>Driver attrition in the Top Performer tier (42 drivers generating disproportionate revenue) is the highest-impact human capital risk — a 10% departure rate from this cohort could represent $20M+ in revenue exposure</li>
+            <li>OH-OR route with 10 incidents needs immediate operational review — if the root cause is structural (terrain, schedule pressure), continuing operations on this lane without intervention compounds both safety and insurance risk</li>
+            <li>Fleet idle rate trending upward above 25% would indicate a capacity-demand imbalance that requires either load acquisition or fleet rightsizing before it permanently erodes asset ROI</li>
+          </ul>
+        </div>
+
+        <div style="margin-top: 24px; background: rgba(3,196,161,0.06); border: 1px solid rgba(3,196,161,0.2); border-radius:12px; padding:28px;">
+          <h4 style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;">Growth Projections</h4>
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div>
+              <div style="font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--white);">$275–285M</div>
+              <div style="font-size:12px; color:var(--light-text);">Projected 2025 Revenue (conservative, no new customers)</div>
+            </div>
+            <div>
+              <div style="font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--primary);">$8–12M</div>
+              <div style="font-size:12px; color:var(--light-text);">Revenue uplift potential from route optimization alone</div>
+            </div>
+            <div>
+              <div style="font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--accent);">$6–8M</div>
+              <div style="font-size:12px; color:var(--light-text);">Fuel savings potential from 5–7% MPG fleet improvement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="cta-section">
+  <div class="cta-inner">
+    <div class="hero-badge" style="margin: 0 auto 24px;">
+      <span></span>
+      View the Work
+    </div>
+    <h2>Explore the Full Project</h2>
+    <p>From the raw MySQL schema to the interactive Tableau dashboards — every layer of this project is available to explore. Connect with me if you want to discuss the methodology, the findings, or how this kind of analysis applies to your operation.</p>
+    <div class="cta-buttons">
+      <a href="https://public.tableau.com/views/TruckExpressAnalysisDashboard/ExecutiveSummary?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View Interactive Tableau Dashboard
+      </a>
+      <a href="logistics-project-3.html" class="btn-accent">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        View other Logistics Dashboard Project Made with Excel
+      </a>
+      <a href="https://idowu-aluko-portfolio.vercel.app" target="_blank" class="btn-outline">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        Visit My Portfolio
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <p>Truck Express Analysis Dashboard — A portfolio project by <a href="https://idowu-aluko-portfolio.vercel.app" target="_blank">Idowu Aluko</a> &nbsp;·&nbsp; <a href="https://linkedin.com/in/idowu-aluko" target="_blank">LinkedIn</a> &nbsp;·&nbsp; <a href="https://github.com/al3x-id" target="_blank">GitHub</a> &nbsp;·&nbsp; <a href="mailto:idowualuko58@gmail.com" target="_blank">idowualuko58@gmail.com</a>
+</footer>
+
+</body>
+</html>
