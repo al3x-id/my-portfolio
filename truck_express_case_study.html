@@ -28,6 +28,7 @@
     background: var(--bg);
     color: var(--text);
     line-height: 1.7;
+    margin: 0;
     overflow-x: hidden;
   }
 
@@ -578,6 +579,12 @@
     color: var(--primary);
     font-family: 'DM Sans', monospace;
     white-space: nowrap;
+  }
+
+  .pill-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .divider-arrow {
@@ -1185,19 +1192,155 @@
   }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
+
+    /* ── GLOBAL ── */
+    body { overflow-x: hidden; }
+
+    section { padding: 64px 4%; }
+
+    /* ── NAV ── */
+    .nav-links { display: none; }
+    nav { padding: 0 4%; }
+
+    /* ── HERO ── */
+    .hero { padding: 100px 4% 64px; }
+    .hero h1 { font-size: 38px; letter-spacing: -1px; }
+    .hero-sub { font-size: 15px; }
+    .hero-meta { gap: 20px; }
+    .hero-ctas { flex-direction: column; }
+    .hero-ctas a { width: 100%; justify-content: center; }
+    .logo-placeholder { width: 96px; height: 96px; }
+
+    /* ── STATS BAR ── */
+    .stats-bar { padding: 28px 4%; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .stat-value { font-size: 28px; }
+
+    /* ── ALL MULTI-COLUMN GRIDS → SINGLE COLUMN ── */
     .overview-grid,
     .engineering-layout,
     .dashboard-layout,
     .impact-grid,
-    .predictions-layout { grid-template-columns: 1fr; }
+    .predictions-layout,
+    .why-cards,
+    .analytics-cards,
+    .insights-grid,
+    .recs-grid { grid-template-columns: 1fr; }
 
-    .why-cards { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    .hero h1 { letter-spacing: -1px; }
-    .views-grid { grid-template-columns: 1fr; }
+    /* ── TABLES DIAGRAM — key fix for your overflow issue ── */
+    .tables-diagram {
+      width: 100%;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    /* Fix the inner grids inside tables-diagram */
+    .tables-diagram > div > div[style*="grid-template-columns"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    .table-pill,
+    .view-pill {
+      font-size: 11px;
+      padding: 6px 10px;
+      word-break: break-all;
+    }
+
+    /* ── VIEWS GRID & PILL GRID ── */
+    .views-grid,
+    .pill-grid { grid-template-columns: 1fr; }
+
+    /* ── SECTION HEADINGS ── */
+    .section-title { font-size: 26px; letter-spacing: -0.5px; }
+    .section-desc { font-size: 14px; margin-bottom: 36px; }
+
+    /* ── DASHBOARD SHOWCASE ── */
+    .dashboard-section { margin-bottom: 56px; padding-bottom: 56px; }
+    .dashboard-header { gap: 12px; }
+    .dashboard-title-group h3 { font-size: 18px; }
+    .dashboard-image-placeholder { min-height: 200px; padding: 24px; }
+    .placeholder-icon { font-size: 36px; }
+
+    /* ── KPI TAGS ── */
+    .kpi-tags { gap: 6px; }
+    .kpi-tag { font-size: 11px; padding: 4px 10px; }
+
+    /* ── ENGINEERING ── */
+    .engineering-layout { gap: 36px; }
+    .engineering-text p { font-size: 14px; }
+
+    /* ── PROCESS STEPS ── */
+    .step-content h4 { font-size: 14px; }
+    .step-content p { font-size: 12px; }
+
+    /* ── ANALYTICS CARDS ── */
+    .analytics-cards { gap: 16px; }
+    .analytics-card { padding: 22px; }
+
+    /* ── INSIGHT CARDS ── */
+    .insights-grid { gap: 16px; }
+    .insight-card { padding: 24px; }
+    .insight-stat-value { font-size: 24px; }
+
+    /* ── IMPACT CARDS ── */
+    .impact-grid { gap: 16px; }
+    .impact-card { padding: 24px; }
+
+    /* ── RECOMMENDATIONS ── */
+    .recs-grid { gap: 16px; }
+    .rec-card { padding: 22px; }
+
+    /* ── PREDICTIONS ── */
+    .predictions-layout { gap: 32px; }
+    .risk-box { padding: 22px; }
+
+    /* ── INLINE STYLE GRIDS (inside HTML) ── */
+    /* The schema grid inside tables-diagram uses inline style grid */
+    [style*="grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* ── CTA ── */
+    .cta-section { padding: 72px 4%; }
+    .cta-section h2 { font-size: 28px; letter-spacing: -0.5px; }
+    .cta-section p { font-size: 14px; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .cta-buttons a { width: 100%; max-width: 320px; justify-content: center; }
+
+    /* ── BUTTONS ── */
+    .btn-primary,
+    .btn-accent,
+    .btn-outline,
+    .btn-github { font-size: 13px; padding: 12px 20px; }
+
+    /* ── FOOTER ── */
+    footer { padding: 28px 4%; }
+    footer p { font-size: 12px; line-height: 1.8; }
+
+    /* ── WHY CARDS ── */
+    .why-cards { gap: 12px; }
+    .why-card { padding: 20px; }
+
+    /* ── HERO META ── */
+    .hero-meta { grid-template-columns: repeat(2, 1fr); display: grid; }
+
+    /* ── TECH STACK ── */
+    .tech-stack { gap: 8px; }
+    .tech-badge { font-size: 11px; padding: 5px 10px; }
   }
 
+  /* ── EXTRA SMALL (phones under 400px) ── */
+  @media (max-width: 400px) {
+    .hero h1 { font-size: 30px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .stat-value { font-size: 24px; }
+    .section-title { font-size: 22px; }
+    .dashboard-number { width: 36px; height: 36px; font-size: 15px; }
+    .kpi-tag { font-size: 10px; }
+  }
+
+  
   /* ── UTILITIES ── */
   .mt-8 { margin-top: 8px; }
   .mt-16 { margin-top: 16px; }
@@ -1435,7 +1578,7 @@
           <h4>Schema → Views Architecture</h4>
           <div class="table-flow">
             <p style="font-size:12px; color:var(--light-text); margin-bottom:8px;">14 Raw Tables</p>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+            <div class="pill-grid" style="margin-bottom:16px;">
               <span class="table-pill">drivers</span>
               <span class="table-pill">trucks</span>
               <span class="table-pill">trailers</span>
@@ -1453,7 +1596,7 @@
             </div>
             <div class="divider-arrow">↓ MySQL Views ↓</div>
             <p style="font-size:12px; color:var(--light-text); margin-bottom:8px;">7 Optimized Views</p>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div class ="pill-grid">
               <span class="view-pill">executive_overview</span>
               <span class="view-pill">route_customer_profitability</span>
               <span class="view-pill">truck_performance</span>
