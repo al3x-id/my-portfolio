@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Logistic Delivery Insights - Power BI Dashboard</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>Data Analyst Portfolio</strong> <span>by Idowu Aluko</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+				<nav id="menu">
+					<ul class="links">
+						<li><a href="index.html">Home</a></li>
+						<li><a href="about.html">About</a></li>
+						<li><a href="#footer">Contact</a></li>
+						 <div class="dropup">
+							<button class="dropbtn">Portfolio Projects</button>
+							  <div class="dropup-content">
+									<a href="python.html">Python</a>
+									<!--
+									<a href="r.html">R</a>
+									-->
+									<a href="sql.html">SQL</a>
+									<a href="excel.html">Excel</a>
+									<a href="powerbi.html">Power BI</a>
+									<a href="https://public.tableau.com/app/profile/idowu.aluko6465" target="_blank" class="link">Tableau</a>
+							</div>
+						 </div>	
+					</ul>						
+				</nav>
+
+
+				<!-- Main -->
+					<div id="main" class="alt">
+						
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Project Details</h1>
+									</header>
+									<p>A logistic company lacks visibility into delivery performance, revenue drivers, operational efficiency and customer behaviour due to fragmented CRM and ERP data.</p>
+									<!--<span class="image main"><img src="images/pic11.jpg" alt="" /></span> -->
+									<h2>Goal</h2>
+									<p>The goal is to provides a unified view to optimize operations, improve delivery performance and increase profitability. To accomplish this, we will analyze logistic data from an API containing information on Customer, Drivers, Route, Order, Revenue, and Deliveries.</p>
+									<a href="https://raw.githubusercontent.com/al3x-id/End-to-End-Logistics-Business-Operation-Intelligence/refs/heads/main/logistics_messy_dataset.csv" target="_blank">Download from GitHub!</a>
+									<p></p>
+
+									<h2>Setup</h2>
+									<p>To start the project, data cleaning was performed to ensure accurate analysis. This included the removal of duplicate entries to avoid potential biases in the dataset. Furthermore, the data was updated to be more interpretable, such as removing useless API columns, removing "NGN and ₦ from currencies, removing "km" from distance, fixing date columns, standardized text fields, split customer location, handled nulls and errors replacing. The raw dataset contained unrealistic route IDs and inconsistent location mappings. I implemented a location reference table and derived route logic to ensure analytical integrity. Additionally, I ensured there was no missing data and that each field had the correct data type. Finally I transformed the flat dataset into a structured star schema with fact and dimension tables, improving data model performance and enabling scalable analytics.</p>
+									<img src="images/powerquery.png" alt="Dataset after Transformation" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Fig 1. This image shows the dataset after it was cleaned.</i></p>
+
+									<img src="images/data model.png" alt="Star Schema" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Fig 2. This image shows the dataset structured Star Schema.</i></p>
+																		
+									<h2>Analysis</h2>
+									<p>Now that we have clean data, we can perform exploratory data analysis to gain insights and patterns in the data.</p>
+									<h4>Business Questions:</h4>
+									<ol>
+										<li>What is the overall performance of the business?</li>
+										<li>Which drivers are driving revenue and operational success?</li>
+										<li>How efficient are our logistics operations?</li>
+										<li>Who are our customers and how reliable are they?</li>
+									</ol>
+
+									
+									<h2>Data Exploration</h2>
+									<p>I started by developing advance DAX measures including time intelligence, ranking and performance KPIs to enable operational and strategic decision-making.</p>
+
+									
+
+									<p>To make it easy I designed a 2 page executive dashboard addressing key business questions across revenue performance, driver efficiency, operation optimization and customer behaviour using a structured star schema and advanced DAX measures.</p>
+									<img src="images/delivery 1.png" alt="Overview" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Fig 3. This image shows the Delivery Dashboard Overview.</i></p>
+									<img src="images/delivery 2.png" alt="Driver Performance" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Fig 4. This image shows the Driver Performance Table.</i></p>
+
+									<h3>Key Findings</h3>
+
+									<p>Using the dashboard, we were able to determine the following insights:
+									</p>
+									<ul>
+										<li>Overall Business Performance: The business is generating ₦995.83M in total revenue across 38K orders from 8859 customers, with an average of 4.29 orders per customer, a healthy repeat-purchase signal. Revenue per KM sits at ₦1.36K, and the monthly trend charts show a consistent revenue band between ₦84M–₦85M, with a notable spike toward ₦85M+ in November–December, suggesting seasonal demand. Order volume mirrors this pattern, oscillating between 3,800–4,200 orders/month with the same late-year uptick. Growth is stable rather than explosive, the Monthly Growth % lines hover near 0%, meaning the business is mature and consistent but not in a high-growth phase.</li>
+										<li>Which Drivers Are Driving Revenue & Success: Vanessa Jones is the clear overall leader  highest revenue, most deliveries, and competitive efficiency (₦0.24 cost, ₦1,562/KM). Barbara Heath stands out as a route efficiency star only 28 deliveries but ₦2,563/KM, nearly double the average, suggesting she runs high-value routes with excellent distance economics. Nicole Benson (Rank 868) at 42 deliveries but has the highest cost efficiency ratio (₦0.41) and an above-average on-time rate (52.4%)</li>
+										<li>How Efficient Are Logistics Operations: 
+												Cost Efficiency: ₦0.26/unit — lean, but driver-level variance is wide (₦0.21 to ₦0.31), meaning some drivers are 48% more expensive per unit than others
+												On-Time Delivery Rate: 50.2% — this is the biggest red flag. 2 out of 3 deliveries arrive on time. At the driver level, the best is ~75.0 (Cheryl Page) and several drivers are in the 24–48% range, which is operationally poor
+												Revenue by Route: Port Harcourt–Abuja dominates at ₦224.94M, roughly 2x the next-best routes (Abuja–Abuja, Ikeja–Lagos at ~₦112M). This concentration is both an asset and a risk</li>
+										<li>Who Are Our Customers & How Reliable Are They: The segments are almost perfectly balanced, which is unusual and worth verifying in the data model. Typically you'd expect a pyramid (many new, fewer VIP). If accurate, it means the business has an exceptionally strong retention and loyalty engine, nearly two-thirds of customers are repeat or VIP. The 4.28 orders/customer average supports this. The risk is customer acquisition: new customers are only 1/3 of the base, so if churn increases, the pipeline may not replenish fast enough.</li>
+									  </ul>
+
+
+									<h3>Recommendations</h3>
+									<p>Based on these findings, the business can implement the following actionable steps to improve operations:</p>
+									<ul>
+										<li>Investigate the 50.2% on-time rate, identify whether it's route-specific, driver-specific, or systemic</li>
+										<li>Protect the Port Harcourt–Abuja route, it's generating 2x competitor routes; any disruption would be disproportionately damaging</li>
+										<li>Study Barbara Heath's route assignment, her ₦2,563/KM is a model worth replicating across other drivers</li>
+									</ul>
+
+									<p>The Delivery Dashboard reveals a stable, profitable logistics operation with strong customer loyalty but meaningful operation gaps that are limiting its growth ceiling.</p>
+								</div>
+							</section>
+                        
+					</div>
+
+				<!-- Contact -->
+					<!--<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000 x12387</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>1234 Somewhere Road #5432<br />
+										Nashville, TN 00000<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>-->
+						</div>
+					</section>
+
+				<!-- Footer -->
+				<section class="split">
+					<section>
+						<h4>Contact Information</h4>															
+					</section>
+				</section>
+			</div>
+								<!-- Footer -->
+		<footer id="footer">
+			<div class="inner">
+				<ul class="icons">
+					<li><a href="mailto:idowualuko58@gmail.com" target="_blank" class="icon solid alt fa-envelope"><span class="label">Twitter</span></a></li>
+					<li><a href="https://github.com/al3x-id" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+					<li><a href="https://www.linkedin.com/in/idowu-aluko/" target="_blank" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+				</ul>
+				<ul class="copyright">
+					<li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+				</ul>
+			</div>
+		</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
