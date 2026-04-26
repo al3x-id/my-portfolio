@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Fintech Insights - Excel Dashboard</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo"><strong>Data Analyst Portfolio</strong> <span>by Idowu Aluko</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+				<nav id="menu">
+					<ul class="links">
+						<li><a href="index.html">Home</a></li>
+						<li><a href="about.html">About</a></li>
+						<li><a href="#footer">Contact</a></li>
+						 <div class="dropup">
+							<button class="dropbtn">Portfolio Projects</button>
+							  <div class="dropup-content">
+									<a href="python.html">Python</a>
+									<!--
+									<a href="r.html">R</a>
+									-->
+									<a href="sql.html">SQL</a>
+									<a href="excel.html">Excel</a>
+									<a href="powerbi.html">Power BI</a>
+									<a href="https://public.tableau.com/app/profile/idowu.aluko6465" target="_blank" class="link">Tableau</a>
+							</div>
+						 </div>	
+					</ul>						
+				</nav>
+
+
+				<!-- Main -->
+					<div id="main" class="alt">
+						
+
+						<!-- One -->
+							<section id="one">
+								<div class="inner">
+									<header class="major">
+										<h1>Project Details</h1>
+									</header>
+									<p>This project focuses on analyzing fintech transaction data to uncover insights into revenue performance, operational efficiency and customer behaviour.</p>
+									<!--<span class="image main"><img src="images/pic11.jpg" alt="" /></span> -->
+									<p>The workflow covered the full analytics pipeline:</p>
+									<ul>
+										<li>SQL-based ETL Datawarehouse Structure</li>
+										<li>Data modeling using a star schema</li>
+										<li>Power Pivot Integration</li>
+										<li>Excel dashboard development with dynamic controls</li>
+									</ul>
+									
+									<p>The final deliverable is an interactive dashboard that enables stakehlders to monitor performance and identify business risks.</p>
+									<!--
+									<h2>Goal</h2>
+									<p>The goal is to provides a unified view to optimize operations, improve delivery performance and increase profitability. To accomplish this, we will analyze logistic data from an API containing information on Customer, Drivers, Route, Order, Revenue, and Deliveries.</p>
+									<a href="https://raw.githubusercontent.com/al3x-id/End-to-End-Logistics-Business-Operation-Intelligence/refs/heads/main/logistics_messy_dataset.csv" target="_blank">Download from GitHub!</a>
+									<p></p>
+
+									<h2>Setup</h2>
+									<p>To start the project, data cleaning was performed to ensure accurate analysis. This included the removal of duplicate entries to avoid potential biases in the dataset. Furthermore, the data was updated to be more interpretable, such as removing useless API columns, removing "NGN and ₦ from currencies, removing "km" from distance, fixing date columns, standardized text fields, split customer location, handled nulls and errors replacing. The raw dataset contained unrealistic route IDs and inconsistent location mappings. I implemented a location reference table and derived route logic to ensure analytical integrity. Additionally, I ensured there was no missing data and that each field had the correct data type. Finally I transformed the flat dataset into a structured star schema with fact and dimension tables, improving data model performance and enabling scalable analytics.</p>
+									<img src="images/powerquery.png" alt="Dataset after Transformation" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Fig 1. This image shows the dataset after it was cleaned.</i></p>
+
+									
+														
+									<h2>Analysis</h2>
+									<p>Now that we have clean data, we can perform exploratory data analysis to gain insights and patterns in the data.</p>
+									-->
+									<h2>Business Problem</h2>
+									<p>Despite consistent transaction activity, fintech platforms often struggle with:</p>
+									<ul>
+										<li>Low transaction success rates</li>
+										<li>Revenue concentration among a few merchants</li>
+										<li>Limited visibility into customer value distribution</li>
+										<li>Difficulty tracking performance trends over time</li>
+									</ul>
+									<h3>Business Questions:</h2>
+										<ol>
+											<li>How is the platform performing overall?</li>
+											<li>Are transactions being sucessfully processed?</li>
+											<li>What are the revenue trends over time?</li>
+											<li>Which merchants drive the most revenue?</li>
+											<li>How is revenue distributed across customers?</li>
+											<li>What payment method are most used?</li>
+										</ol>
+
+										<h2>Data Preparation & Modelling</h2>
+										<h3>Data Architecture</h3>
+										<p>The data architecture for this project follows three architectural layers Bronze, Silver and Gold layers</p>
+										<img src="images/data architecture.png" alt="Dataset Architecture" style="width:1000px;height:500px;" data-position="center center" />
+										<p><i>The Project Data Architecture.</i></p>
+
+
+										<h3>Data Cleaning</h3>
+										<p>Key transformations in the Silver layer:</p>
+										<ol>
+											<li>Removed currency symbols and standardized numeric formats</li>
+											<li>Handled incosistent date formats</li>
+											<li>Resolved duplicate transaction IDs</li>
+											<li>Standardized categorical fields (status, payment method, merchants)</li>
+										</ol>
+										<a href="https://github.com/al3x-id/End-to-End-Fintech-Analysis/tree/6885950632e2ac1a951081fa9e04f330496bb632/SQL%20script" target="_blank">View ETL Datawarehouse SQL-based Query!</a>
+									
+										<h3>Data Modeling</h3>
+										<p>A star schema was implemented</p>
+										<ul>
+											<li>Fact Tables: gold.fintech_transformation</li>
+											<li>Dimension Tables: gold.fintech_users, gold.fintech_merchants, Calendar</li>
+										</ul>
+										<img src="images/powerpivotschema.png" alt="Star Schema" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>This image shows the dataset structured Star Schema.</i></p>
+									
+									<h3>Excel Integration</h3>
+									<ul>
+										<li>Loaded via SQL view</li>
+										<li>Built measures Power Pivot</li>
+										<li>Used GETPIVOTDATA for dynamic dasboard control</li>
+									</ul>
+									<h2>Dashboard Overview</h2>
+									<img src="images/Home.png" alt="Overview" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>This image shows the Dashboard Overview.</i></p>
+									<a href="https://1drv.ms/x/c/2e306439df9f6959/IQAcsu2kbIEzRoZPmT88eDj2AYIjrqgs7xS93XoGK0tCnQI?e=uGV3pb" target="_blank">View Excel Workbook for Interaction!</a>
+
+									<h2>Key Findings</h2>
+									<h3>Revenue Performance and Transaction Trends</h3>
+									<ul>
+										<li>The platform generated over ₦619M in total revenue </li>
+										<li>Revenue trend is relatively stable with no strong growth pattern</li>
+										<li>Transaction volume aligns closely with revenue trends</li>
+										<li>No major spikes or seasonality observed</li>
+										<li>The business is operationally active but not experiencing significant growth.</li>
+										<li>Growth opportunities may require strategic expansion or improved conversion rates</li>
+									</ul>
+
+									<img src="images/monthlytrend.png" alt="Monthly Trend" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Revenue and Transaction Growth Pattern</i></p>
+
+									<h3>Merchant Contribution</h3>
+									<ul>
+										<li>There is healthy distribution of revenue among merchants.</li>
+										<li>Revenue is not heavily dependent on small group of merchants, posing little to no business risk if key merchants churn</li>
+									</ul>
+
+										<img src="images/merchants.png" alt="Top 10 merchants" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Top 10 Merchants</i></p>
+
+									<h3>Operational Reliability</h3>
+									<ul>
+										<li>Only 51% transactions are successful</li>
+										<li>Almost half of all transactions fail or remain pending, indicating major inefficiencies in payment processing or system reliability</li>
+									</ul>
+
+										<img src="images/status.png" alt="Operational Reliability" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Operational Reliability</i></p>
+
+									<h3>User Segmentation</h3>
+									<ul>
+										<li>High-value customers contribute the largest share of revenue</li>
+										<li>Revenue is concentrated among high-value users, making retention critical</li>
+									</ul>
+
+										<img src="images/usersegment.png" alt="User Segmentation" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>User Segmentation</i></p>
+
+									<h3>Payment Behavior</h3>
+									<ul>
+										<li>No single payment method significantly outperform others, suggesting balanced adoption across channels</li>
+									</ul>
+
+										<img src="images/channels.png" alt="Preferred Payment Channels" style="width:1000px;height:500px;" data-position="center center" />
+									<p><i>Preferred Payment Channels</i></p>
+
+
+
+									<h2>Recommendations</h3>
+									<p>Based on these findings, the business can implement the following actionable steps to improve operations:</p>
+									<ul>
+										<li>Improve Transaction Success: Investigate failure causes (network, payment gateway, validation errors)</li>
+										<li>Retain High-Value Users: Introduce loyalty programs and offer incentives for repeat usage</li>
+										<li>Drive Growth: Improve conversion rates (reduce failed/ pending transactions) and Expand customer acquisition strategies</li>
+										<li>Study Barbara Heath's route assignment, her ₦2,563/KM is a model worth replicating across other drivers</li>
+									</ul>
+
+									<h2>Conclusion</h2>
+									<p>The analysis reveal that while platform generates consistent revenue, operational inefficiencies and revenue concentration limit its growth potential.</p>
+								</div>
+							</section>
+                        
+					</div>
+
+				<!-- Contact -->
+					<!--<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(000) 000-0000 x12387</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>1234 Somewhere Road #5432<br />
+										Nashville, TN 00000<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>-->
+						</div>
+					</section>
+
+				<!-- Footer -->
+				<section class="split">
+					<section>
+						<h4>Contact Information</h4>															
+					</section>
+				</section>
+			</div>
+								<!-- Footer -->
+		<footer id="footer">
+			<div class="inner">
+				<ul class="icons">
+					<li><a href="mailto:idowualuko58@gmail.com" target="_blank" class="icon solid alt fa-envelope"><span class="label">Twitter</span></a></li>
+					<li><a href="https://github.com/al3x-id" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+					<li><a href="https://www.linkedin.com/in/idowu-aluko/" target="_blank" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+				</ul>
+				<ul class="copyright">
+					<li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+				</ul>
+			</div>
+		</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
